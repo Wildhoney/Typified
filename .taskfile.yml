@@ -1,0 +1,7 @@
+- name: start
+  task: node --experimental-modules ./example/server/index.mjs
+
+- name: format
+  tasks: 
+    - prettier --write '{src,tests,example}/**/*.{js,css}'
+    - prettier --write '*.{js,json}'

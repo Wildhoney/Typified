@@ -1,28 +1,35 @@
 {
-  "name": "typified",
-  "version": "0.1.0",
-  "description": "An experimental implementation of first class functional types using pure ES at runtime.",
-  "main": "src/index.js",
-  "scripts": {
-    "test": "ava"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Wildhoney/Typified.git"
-  },
-  "keywords": [
-    "types",
-    "typing",
-    "es",
-    "native",
-    "first class",
-    "static typing",
-    "typing types"
-  ],
-  "author": "Adam Timberlake <adam.timberlake@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Wildhoney/Typified/issues"
-  },
-  "homepage": "https://github.com/Wildhoney/Typified#readme"
+    "name": "typified",
+    "version": "0.1.0",
+    "description": "An experimental implementation of first class functional types using pure ES at runtime.",
+    "main": "src/index.js",
+    "scripts": {
+        "test": "taskfile test",
+        "format": "taskfile format",
+        "start": "taskfile start"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Wildhoney/Typified.git"
+    },
+    "keywords": [
+        "types",
+        "typing",
+        "es",
+        "native",
+        "first class",
+        "static typing",
+        "typing types"
+    ],
+    "author": "Adam Timberlake <adam.timberlake@gmail.com>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/Wildhoney/Typified/issues"
+    },
+    "homepage": "https://github.com/Wildhoney/Typified#readme",
+    "devDependencies": {
+        "express": "^4.16.4",
+        "prettier": "^1.14.3",
+        "taskfile": "^0.8.5"
+    }
 }
