@@ -1,26 +1,13 @@
-const ꓽꓽ = type => {
-    return a => {
-        return !isFunction(a)
-            ? a
-            : (...input) => {
-                  validateInput(type, input);
-                  // console.log('Called: ' + input[0].constructor.name);
-                  const output = fn(...input);
-                  validateOutput(type, output);
-                  // console.log('Returned: ' + output.constructor.name);
-                  return output;
-              };
-    };
-};
+import * as u from './utils.js';
+import * as validate from './validate.js';
 
-const isFunction = ꓽꓽ `∀ a. a → Boolean` (a => typeof a === 'function');
-
-const validateInput = ꓽꓽ `∀ a. String → [a] → Boolean` ((type, input) => {
-    return true;
-})
-
-const validateOutput = ꓽꓽ `∀ a. String → [a] → Boolean` ((type, input) => {
-    return true;
-})
-
-export default ꓽꓽ;
+export default ([type]) => a =>
+    !u.isFunction(a)
+        ? a
+        : (...input) => {
+              const ast = u.parseType(type);
+              const genericMap = validate.input(ast, input);
+              const output = a(...input);
+              validate.output(ast, output, genericMap);
+              return output;
+          };
