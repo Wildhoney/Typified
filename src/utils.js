@@ -1,9 +1,11 @@
 export const typeArrows = /->|→/;
 
+const scalarType = /^(?<type>.+?)\((?<description>.+?)\)$/i;
+
 class TypeError extends Error {}
 
 const matches = {
-    generics: `(?:∀|forall(?<generics>.+?)\\.)?`,
+    generics: `(?:(?:∀|forall)(?<generics>.+?)\\.)?`,
     aliases: `(?:(?<aliases>.+?)(?:=>|⇒))?`,
     types: `(?<types>.+)`
 };
@@ -39,8 +41,13 @@ export const parseType = type => {
     const types = match.types
         .split(typeArrows)
         .map(trim)
-        .map(type => aliasMap[type] || type);
-    return { types, generics: match.generics.split(' ').map(trim) };
+        .map(type => (aliasMap ? aliasMap[type] || type : type));
+
+    return {
+        types,
+        generics: match.generics ? match.generics.split(' ').map(trim) : [],
+        aliases: aliasMap || {}
+    };
 };
 
 export const throwTypeError = (expectedType, actualType) => {
@@ -48,3 +55,9 @@ export const throwTypeError = (expectedType, actualType) => {
         `Expected "${expectedType}" for sayHello but received "${actualType}".`
     );
 };
+
+export const isScalarType = type => scalarType.test(type);
+
+export const parseScalar = type => type.match(scalarType).groups;
+
+export const getType = value => value.constructor.name;
