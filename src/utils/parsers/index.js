@@ -1,7 +1,10 @@
-import { validateType } from '../validate/index.js';
+import * as validate from '../validate/index.js';
 
-export const parseArray = (type, ast, values, genericMap) => {
-    const expected = ast.aliases[type] || genericMap[type] || type;
-    const initial = validateType('Array', ast, values, genericMap);
-    return values.reduce((genericMap, value) => validateType(expected, ast, value, genericMap).map, initial);
+export const parseArray = (type, ast, values, model) => {
+    const expected = ast.aliases[type] || model.map[type] || type;
+    const initial = validate.byExpectedType('Array', ast, values, model.map);
+    return values.reduce(
+        (model, value) => validate.byExpectedType(expected, ast, value, model.map),
+        initial
+    );
 };

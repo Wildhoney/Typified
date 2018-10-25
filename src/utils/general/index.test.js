@@ -38,7 +38,10 @@ test('It should be able to construct an alias map;', t => {
 });
 
 test('It should be able to throw type errors;', t => {
-    t.throws(() => g.throwTypeError('Number', 'String'), `Expected "Number" for sayHello but received "String".`);
+    t.throws(
+        () => g.throwTypeError('Number', 'String'),
+        `Expected "Number" for sayHello but received "String".`
+    );
 });
 
 test('It should be able to determine if a type is a scalar type;', t => {

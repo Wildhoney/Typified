@@ -9,4 +9,4 @@ const flattenHello =
     (parts => parts.join(' '));
 
 console.log(sayHello('Adam'));
-console.log(flattenHello(['Hello', 'Adam', '!']));
+console.log(flattenHello(['Hello', "Adam", '!']));

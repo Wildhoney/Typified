@@ -1,5 +1,5 @@
 import * as u from './utils/general/index.js';
-import validate from './utils/validate/index.js';
+import * as validate from './utils/validate/index.js';
 
 const typeDeclaration = Symbol('@typified/type-declaration');
 
@@ -15,7 +15,7 @@ export default (types, ...expressions) => a => {
         const f = (...input) => {
             const ast = u.parseTypeDeclaration(type);
             const output = a(...input);
-            validate(ast, [...input, output]);
+            validate.byParameters(ast, [...input, output]);
             return output;
         };
 
