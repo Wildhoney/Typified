@@ -1,5 +1,5 @@
 import * as u from './utils/general/index.js';
-import * as validate from './utils/validate/index.js';
+import validate from './utils/validate/index.js';
 
 const typeDeclaration = Symbol('@typified/type-declaration');
 
@@ -14,9 +14,8 @@ export default (types, ...expressions) => a => {
     if (u.isFunction(a)) {
         const f = (...input) => {
             const ast = u.parseTypeDeclaration(type);
-            // const genericMap = validate.input(ast, input);
             const output = a(...input);
-            validate.input(ast, [...input, output]);
+            validate(ast, [...input, output]);
             return output;
         };
 

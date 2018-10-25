@@ -1,16 +1,11 @@
 import * as u from '../general/index.js';
 import * as parser from '../parsers/index.js';
 
-export const input = (ast, input) =>
+export default (ast, input) =>
     input.reduce((genericMap, value, index) => {
         const type = ast.types[index];
         return validateType(type, ast, value, genericMap);
     }, {});
-
-export const output = (ast, output, genericMap) => {
-    const type = ast.types[ast.types.length - 1];
-    return validateType(type, ast, output, genericMap);
-};
 
 export const validateType = (type, ast, value, genericMap = {}) => {
     const actual = u.determineType(value);
