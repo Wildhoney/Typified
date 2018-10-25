@@ -14,9 +14,9 @@ export default (types, ...expressions) => a => {
     if (u.isFunction(a)) {
         const f = (...input) => {
             const ast = u.parseTypeDeclaration(type);
-            const genericMap = validate.input(ast, input);
+            // const genericMap = validate.input(ast, input);
             const output = a(...input);
-            validate.output(ast, output, genericMap);
+            validate.input(ast, [...input, output]);
             return output;
         };
 
