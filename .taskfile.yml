@@ -5,3 +5,6 @@
   tasks: 
     - prettier --write '{src,tests,example}/**/*.{js,css}'
     - prettier --write '*.{js,json}'
+
+- name: test
+  task: ava

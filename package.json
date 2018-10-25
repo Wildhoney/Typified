@@ -28,8 +28,20 @@
     },
     "homepage": "https://github.com/Wildhoney/Typified#readme",
     "devDependencies": {
+        "ava": "^0.25.0",
+        "browser-env": "^3.2.5",
+        "core-js": "^2.5.7",
+        "esm": "^3.0.84",
         "express": "^4.16.4",
         "prettier": "^1.14.3",
         "taskfile": "^0.8.5"
+    },
+    "ava": {
+        "failFast": true,
+        "require": [
+            "esm",
+            "core-js",
+            "./tests/helpers/browser-env.js"
+        ]
     }
 }
