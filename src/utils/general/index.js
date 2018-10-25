@@ -12,9 +12,9 @@ const matches = {
     types: `(?<types>.+)`
 };
 
-export const isFunction = a => typeof a === 'function';
-
 export const trim = a => a.trim();
+
+export const isFunction = a => typeof a === 'function';
 
 export const prettifyExpected = type => [].concat(type).join(' | ');
 
@@ -34,12 +34,7 @@ export const parseTypeDeclaration = type => {
         );
     const generics = match.generics ? match.generics.split(' ').map(trim) : [];
     const aliases = aliasMap || {};
-
-    return {
-        types,
-        generics,
-        aliases
-    };
+    return { types, generics, aliases, declaration: type.trim() };
 };
 
 export const trimMerge = (model, [key, value]) => ({
@@ -53,8 +48,14 @@ export const createAliasMap = aliases =>
         return { ...map, [alias]: type };
     }, {});
 
-export const throwTypeError = (expectedType, actualType) => {
-    throw new TypeError(`Expected "${expectedType}" for sayHello but received "${actualType}".`);
+export const throwTypeMismatchError = (expected, actual, declaration) => {
+    throw new TypeError(`Expected ${expected} in \`${declaration}\` but received ${actual}.`);
+};
+
+export const throwTypeLengthError = (expected, actual, declaration) => {
+    throw new TypeError(
+        `Expected ${expected} function parameters but received ${actual} in \`${declaration}\`.`
+    );
 };
 
 export const isScalar = type => scalarType.test(type);

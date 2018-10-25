@@ -4,7 +4,8 @@ export default [
         ast: {
             generics: [],
             aliases: { s: 'String' },
-            types: [['String'], ['String']]
+            types: [['String'], ['String']],
+            declaration: 'String s ⇒ s → s'
         }
     },
     {
@@ -12,7 +13,8 @@ export default [
         ast: {
             generics: ['a'],
             aliases: {},
-            types: [['Array(a)'], ['a']]
+            types: [['Array(a)'], ['a']],
+            declaration: '∀ a. Array(a) → a'
         }
     },
     {
@@ -20,7 +22,8 @@ export default [
         ast: {
             generics: ['a'],
             aliases: { n: 'Number' },
-            types: [['Number'], ['a'], ['a']]
+            types: [['Number'], ['a'], ['a']],
+            declaration: '∀ a. Number n ⇒ n → a → a'
         }
     },
     {
@@ -28,7 +31,8 @@ export default [
         ast: {
             generics: ['a'],
             aliases: { n: 'Number' },
-            types: [['String', 'void'], ['String', 'a', 'Array(String)'], ['Number', 'void']]
+            types: [['String', 'void'], ['String', 'a', 'Array(String)'], ['Number', 'void']],
+            declaration: '∀ a. Number n ⇒ String|void → String|a|Array(String) → Number|void'
         }
     }
 ];

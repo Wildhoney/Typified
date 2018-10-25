@@ -1,11 +1,14 @@
 import * as u from '../general/index.js';
 import * as parser from '../parsers/index.js';
 
-export const byParameters = (ast, parameters) =>
+export const byParameters = (ast, parameters) => {
+    const isCountMatch = ast.types.length === parameters.length;
+    !isCountMatch && u.throwTypeLengthError(ast.types.length, parameters.length, ast.declaration);
     parameters.reduce((genericMap, value, index) => {
         const type = ast.types[index];
         return byExpectedType(type, ast, value, genericMap);
     }, {});
+};
 
 export const byExpectedType = (type, ast, value, genericMap = {}) => {
     const initial = { map: genericMap, matched: false };
@@ -27,6 +30,6 @@ export const byExpectedType = (type, ast, value, genericMap = {}) => {
     }, initial);
 
     const expected = u.prettifyExpected(genericMap[type] || type);
-    !result.matched && u.throwTypeError(expected, actual);
+    !result.matched && u.throwTypeMismatchError(expected, actual, ast.declaration);
     return result;
 };

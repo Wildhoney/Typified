@@ -37,10 +37,17 @@ test('It should be able to construct an alias map;', t => {
     });
 });
 
-test('It should be able to throw type errors;', t => {
+test('It should be able to throw type mismatch errors;', t => {
     t.throws(
-        () => g.throwTypeError('Number', 'String'),
-        `Expected "Number" for sayHello but received "String".`
+        () => g.throwTypeMismatchError('Number', 'String', 'String s ⇒ s → s'),
+        'Expected Number in `String s ⇒ s → s` but received String.'
+    );
+});
+
+test('It should be able to throw type length errors;', t => {
+    t.throws(
+        () => g.throwTypeLengthError(3, 2, 'String s ⇒ s → s'),
+        'Expected 3 function parameters but received 2 in `String s ⇒ s → s`.'
     );
 });
 
