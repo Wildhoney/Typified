@@ -16,17 +16,12 @@ export const isFunction = a => typeof a === 'function';
 
 export const trim = a => a.trim();
 
+export const prettifyExpected = type => [].concat(type).join(' | ');
+
 export const parseTypeDeclaration = type => {
-    const expression = new RegExp(
-        `${matches.generics}${matches.aliases}${matches.types}`,
-        'i'
-    );
-    const match = Object.entries(type.match(expression).groups).reduce(
-        trimMerge,
-        defaults
-    );
-    const aliasMap =
-        match.aliases && createAliasMap(match.aliases.split(',').map(trim));
+    const expression = new RegExp(`${matches.generics}${matches.aliases}${matches.types}`, 'i');
+    const match = Object.entries(type.match(expression).groups).reduce(trimMerge, defaults);
+    const aliasMap = match.aliases && createAliasMap(match.aliases.split(',').map(trim));
 
     const types = match.types
         .split(typeArrows)
@@ -59,9 +54,7 @@ export const createAliasMap = aliases =>
     }, {});
 
 export const throwTypeError = (expectedType, actualType) => {
-    throw new TypeError(
-        `Expected "${expectedType}" for sayHello but received "${actualType}".`
-    );
+    throw new TypeError(`Expected "${expectedType}" for sayHello but received "${actualType}".`);
 };
 
 export const isScalar = type => scalarType.test(type);

@@ -24,16 +24,11 @@ export default [
         }
     },
     {
-        type:
-            '∀ a. Number n ⇒ String|void → String|a|Array(String) → Number|void',
+        type: '∀ a. Number n ⇒ String|void → String|a|Array(String) → Number|void',
         ast: {
             generics: ['a'],
             aliases: { n: 'Number' },
-            types: [
-                ['String', 'void'],
-                ['String', 'a', 'Array(String)'],
-                ['Number', 'void']
-            ]
+            types: [['String', 'void'], ['String', 'a', 'Array(String)'], ['Number', 'void']]
         }
     }
 ];

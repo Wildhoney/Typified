@@ -3,9 +3,7 @@ import * as g from './index.js';
 import typeDeclarations from '../../../tests/helpers/types-declarations.js';
 
 test('It should be able to parse type strings into aliases, generics and types;', t =>
-    typeDeclarations.forEach(({ type, ast }) =>
-        t.deepEqual(g.parseTypeDeclaration(type), ast)
-    ));
+    typeDeclarations.forEach(({ type, ast }) => t.deepEqual(g.parseTypeDeclaration(type), ast)));
 
 test('It should be able to determine a function type;', t => {
     t.false(g.isFunction(1));
@@ -40,10 +38,7 @@ test('It should be able to construct an alias map;', t => {
 });
 
 test('It should be able to throw type errors;', t => {
-    t.throws(
-        () => g.throwTypeError('Number', 'String'),
-        `Expected "Number" for sayHello but received "String".`
-    );
+    t.throws(() => g.throwTypeError('Number', 'String'), `Expected "Number" for sayHello but received "String".`);
 });
 
 test('It should be able to determine if a type is a scalar type;', t => {
