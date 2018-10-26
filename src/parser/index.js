@@ -1,4 +1,4 @@
-const emptyAst = {types: [],generics: [],aliases: {}};
+const emptyAst = { types: [], generics: [], aliases: {} };
 
 export function splitTypeDeclaration(declaration) {
     const groups = declaration.match(
