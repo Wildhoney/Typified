@@ -5,7 +5,7 @@ export default function validate(declaration, parameters, generics = {}) {
     const ast = parser.splitTypeDeclaration(declaration);
     const initial = { generics, errors: [] };
 
-    return parameters.reduce((accum, parameter, index) => {
+    const result = parameters.reduce((accum, parameter, index) => {
         // Handle the processing of the types.
         const actualType = parameter.constructor.name;
         const expectedType = [].concat(accum.generics[ast.types[index]] || ast.types[index]);
@@ -26,4 +26,11 @@ export default function validate(declaration, parameters, generics = {}) {
 
         return { ...accum, generics, errors };
     }, initial);
+
+    result.errors.forEach(error => {
+        // Output any errors that were captured above.
+        throw new u.TypeMismatchError(error)
+    });
+
+    return result;
 }
