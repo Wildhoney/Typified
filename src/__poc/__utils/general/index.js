@@ -23,15 +23,27 @@ export const parseTypeDeclaration = type => {
     const match = Object.entries(type.match(expression).groups).reduce(trimMerge, defaults);
     const aliasMap = match.aliases && createAliasMap(match.aliases.split(',').map(trim));
 
-    const types = match.types
-        .split(typeArrows)
-        .map(trim)
-        .map(types =>
-            types
-                .split('|')
-                .map(trim)
-                .map(type => (aliasMap ? aliasMap[type] || type : type))
-        );
+    // const types = match.types
+    //     .split(typeArrows)
+    //     .map(trim)
+    //     .map(types =>
+    //         types
+    //             .split('|')
+    //             .map(trim)
+    //             .map(type => (aliasMap ? aliasMap[type] || type : type))
+    //     );
+
+    const types = match.types.split(typeArrows).reduce(
+        (accum, current) => {
+            const type = current.trim();
+
+            console.log(name);
+        },
+        { types: [], inFunction: false }
+    );
+
+    console.log(types);
+
     const generics = match.generics ? match.generics.split(' ').map(trim) : [];
     const aliases = aliasMap || {};
     return { types, generics, aliases, declaration: type.trim() };
