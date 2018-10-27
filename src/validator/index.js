@@ -7,7 +7,6 @@ export default function validate(declaration, parameters, generics = {}) {
     const initial = { generics, errors: [] };
 
     const result = parameters.reduce((accum, parameter, index) => {
-
         // Handle the processing of the types.
         const actualType = u.getParameterType(parameter);
         const expectedType = [].concat(accum.generics[ast.types[index]] || ast.types[index]);
@@ -35,7 +34,6 @@ export default function validate(declaration, parameters, generics = {}) {
             : [...accum.errors, u.formatTypeMismatchMessage(actualType, expectedType, declaration)];
 
         return { ...accum, generics, errors };
-
     }, initial);
 
     result.errors.forEach(error => {

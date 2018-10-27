@@ -13,4 +13,4 @@ export function formatLengthMismatchMessage(expectedCount, actualCount, declarat
 export function getParameterType(parameter) {
     const nil = parameter == null;
     return nil ? 'void' : parameter.constructor.name;
-};
+}
