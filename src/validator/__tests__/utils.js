@@ -16,3 +16,15 @@ test('It should be able to format the type mismatch and length messages;', t => 
         'Expected 3 function parameters but received 2 in `Number -> String -> Date`.'
     );
 });
+
+test('It should be able to determine the types of values;', t => {
+    t.is(validatorUtils.getParameterType('Adam'), 'String');
+    t.is(validatorUtils.getParameterType([]), 'Array');
+    t.is(validatorUtils.getParameterType({ name: 'Adam' }), 'Object');
+    t.is(validatorUtils.getParameterType(new Date()), 'Date');
+    t.is(validatorUtils.getParameterType(new Promise(() => {})), 'Promise');
+    t.is(validatorUtils.getParameterType(global.BigInt(5)), 'BigInt');
+    t.is(validatorUtils.getParameterType(new Uint16Array()), 'Uint16Array');
+    t.is(validatorUtils.getParameterType(undefined), 'void');
+    t.is(validatorUtils.getParameterType(null), 'void');
+});
