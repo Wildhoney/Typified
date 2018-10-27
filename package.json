@@ -1,6 +1,6 @@
 {
     "name": "typified",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "An experimental implementation of first class functional types using pure ES at runtime.",
     "main": "src/index.js",
     "scripts": {
