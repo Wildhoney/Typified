@@ -1,14 +1,9 @@
-const emptyAst = { types: [], generics: [], aliases: {} };
-
 export function splitTypeDeclaration(declaration) {
-    const groups = declaration.match(
-        /((?:∀|forall)(?<generics>.+?)\.)?((?<aliases>.+?)(?:⇒|=>))?(?<types>.+)/iu
-    ).groups;
+    const { groups } = declaration.match(/((?:∀|forall)(?<generics>.+?)\.)?((?<aliases>.+?)(?:⇒|=>))?(?<types>.+)/iu);
     const aliases = !groups.aliases ? {} : parseAliases(groups.aliases);
     const generics = !groups.generics ? [] : parseGenerics(groups.generics);
     const types = parseTypes(groups.types, aliases);
-
-    return { ...emptyAst, types, aliases, generics, declaration };
+    return { types, aliases, generics, declaration };
 }
 
 export function parseAliases(declaration) {

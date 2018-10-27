@@ -26,9 +26,7 @@ export default function validate(declaration, parameters, generics = {}) {
         const isGenericType = Boolean(genericType);
 
         // Setup the return for the `reduce` function.
-        const generics = !isGenericType
-            ? accum.generics
-            : { ...accum.generics, [genericType]: actualType };
+        const generics = !isGenericType ? accum.generics : { ...accum.generics, [genericType]: actualType };
         const errors = isTypeValid
             ? accum.errors
             : [...accum.errors, u.formatTypeMismatchMessage(actualType, expectedType, declaration)];
