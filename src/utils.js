@@ -4,7 +4,7 @@ export function concatTemplate(types, expressions) {
     return types
         .map((type, index) => {
             const expression = expressions[index];
-            return `${type} ${expression ? expression : ''}`;
+            return `${type} ${expression || ''}`;
         })
         .join('')
         .trim();

@@ -7,4 +7,6 @@
     - prettier --write '*.{js,json}'
 
 - name: test
-  task: ava
+  tasks:
+    - ava
+    - eslint "src/**/**.js"
