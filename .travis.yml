@@ -1,0 +1,17 @@
+language: node_js
+node_js: stable
+
+script:
+    - npm i
+    - yarn
+    - yarn test
+
+after_success: yarn run coverage
+
+deploy:
+  provider: heroku
+  api_key:
+    secure: SXhK5GUL/6AJf/8LIhIyxmNWia+HK0q9MzzCtQRDSQNu4V7q56d2ekaFUFVM9GL8hTwa1X6GvnluHkD2bY8u9fJysur5vdSLDKHtM1CAaPab6/RTE+YzGhwaN0diKxRt2RgH9yFvBI6cOgXHTFaDTE36uJktbb0BG8GXLdQ1AHymEVfGuWFFZhp2/fIQKZZVtOce2ce0lOlhE71YNjZxTabiYwXnk0z/Y+DaBCYGrG+ts1fBK+/reGHEmk1iH3l4z6Xeoyufb/hCe+9SrZ5P6fgsbCcpwqZDj1fT4LyS77isKzaFbOSEGSUA18BoC2S7iNIf9SJM0TP/AVNgC9La2qlGccBL/ETBTW9Bf4tkVIQ7RkQErlD4SYWEke9eiteQRYwsVQkzNrfo/LmlRnh4oICk3lZ4xWtn6x5hjRn5GPqgsHg35I72ewYcMdYLuyJrDTfXFIoeYm48PJuy74AdJ0S/+cL4MmDqE6ovbMKl7LwJ4+qUirqh1TicHVtpbJyQ9YUyMOZzCsVDZIzGjqI23Fr6dHZ673woTtW3gL/VgDq7nwOAVKmchYUHi04W5s8pN7fA56dEGm0/9ab8lyn+bFp0ywR0rhWeZdM3AZktwiLraULWShMXP0uvSpjOa2TaVOk9VYVtdRv0AKbPNHUnD/wJPHfv+groWhRm7RLbvYA=
+  app: typified
+  on:
+    repo: Wildhoney/Typified
