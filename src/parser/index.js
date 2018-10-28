@@ -1,3 +1,5 @@
+import * as u from './utils.js';
+
 export function splitTypeDeclaration(declaration) {
     const { groups } = declaration.match(/((?:∀|forall)(?<generics>.+?)\.)?((?<aliases>.+?)(?:⇒|=>))?(?<types>.+)/iu);
     const aliases = !groups.aliases ? {} : parseAliases(groups.aliases);
@@ -14,9 +16,11 @@ export function parseAliases(declaration) {
 }
 
 export function parseTypes(declaration, aliases = {}) {
-    return [...declaration.matchAll(/\s*(\(.+?\)|.+?)\s*(?:(?:→|->)|$)/gu)].map(([, type]) =>
-        type.split('|').map(type => (aliases[type.trim()] || type).trim())
-    );
+    const initial = { groups: [], bracketCount: 0, inBrackets: false };
+    return [...declaration.matchAll(/\s*(\(.+?\)|.+?)\s*(?:(?:→|->)|$)/gu)].reduce(
+        (accum, [, type]) => u.balanceBrackets(type, accum, aliases),
+        initial
+    ).groups;
 }
 
 export function parseGenerics(declaration) {
