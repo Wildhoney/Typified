@@ -1,5 +1,6 @@
 import * as parserUtils from '../parser/utils.js';
 import scalarValidators from '../scalars/index.js';
+import * as parser from '../parser/index.js';
 import * as u from './utils.js';
 
 export default function validateDeclaration(ast, declaration, parameters, generics = {}) {
@@ -12,7 +13,7 @@ export default function validateDeclaration(ast, declaration, parameters, generi
         const genericType = expectedType.find(type => ast.generics.includes(type));
 
         // Validate all of the scalars and primitives.
-        const validationResult = findMatchedType(expectedType, parameter, accum, actualType);
+        const validationResult = findMatchedType(ast, expectedType, parameter, accum, actualType);
         const matchedType = validationResult && validationResult.matchedType;
         const newGenerics = validationResult ? validationResult.generics : [];
 
@@ -33,12 +34,12 @@ export default function validateDeclaration(ast, declaration, parameters, generi
     }, initial);
 }
 
-function findMatchedType(expectedType, parameter, accum, actualType) {
+function findMatchedType(ast, expectedType, parameter, accum, actualType) {
     return expectedType
         .map(type => {
             const scalarType = parserUtils.maybeParseScalar(type);
             return scalarType
-                ? validateScalar(scalarType, parameter, accum.generics)
+                ? validateScalar(scalarType, ast, parameter, accum.generics)
                 : validatePrimitive(type, actualType);
         })
         .find(result => result.valid);
@@ -48,7 +49,11 @@ function validatePrimitive(type, actualType) {
     return { matchedType: type, valid: type === actualType, generics: [] };
 }
 
-function validateScalar(scalarType, ...args) {
+function validateScalar(scalarType, ast, ...args) {
     const parseScalar = scalarValidators[scalarType.type] || (() => false);
-    return { matchedType: `${scalarType.type}(${scalarType.description})`, ...parseScalar(scalarType, ...args) };
+    const newAst = { ...parser.splitTypeDeclaration(scalarType.description), generics: ast.generics };
+    return {
+        matchedType: `${scalarType.type}(${scalarType.description})`,
+        ...parseScalar(scalarType, newAst, ...args)
+    };
 }

@@ -54,12 +54,22 @@ test('It should be able to validate a generic a more complex generic function;',
     });
 });
 
-test('It should be able to validate a generic a scalar typed function;', t => {
+test('It should be able to validate a scalar typed function;', t => {
     const declaration = 'Array(String) -> String';
     const ast = parser.splitTypeDeclaration(declaration);
     const parameters = [['Adam', 'Maria'], 'Hello Adam & Maria!'];
     t.deepEqual(validate(ast, declaration, parameters), {
         generics: {},
+        errors: []
+    });
+});
+
+test('It should be able to validate a scalar typed function with generics added to the mix;', t => {
+    const declaration = 'forall a b. Array(a) -> Array(b) -> a';
+    const ast = parser.splitTypeDeclaration(declaration);
+    const parameters = [['Adam', 'Maria'], [33, 28], 'Hello Adam & Maria. You are 33 and 28.'];
+    t.deepEqual(validate(ast, declaration, parameters), {
+        generics: { a: 'String', b: 'Number' },
         errors: []
     });
 });
