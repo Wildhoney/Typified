@@ -9,4 +9,4 @@
 - name: test
   tasks:
     - ava
-    - eslint "src/**/**.js"
+    - - eslint "src/**/**.js"
