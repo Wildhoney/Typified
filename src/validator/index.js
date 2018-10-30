@@ -28,7 +28,7 @@ export default function validateDeclaration(ast, declaration, parameters, generi
         };
         const updatedErrors = isTypeValid
             ? accum.errors
-            : [...accum.errors, u.formatTypeMismatchMessage(actualType, expectedType, declaration)];
+            : [...accum.errors, u.formatTypeMismatchMessage(expectedType, actualType, declaration)];
 
         return { ...accum, generics: updatedGenerics, errors: updatedErrors };
     }, initial);
