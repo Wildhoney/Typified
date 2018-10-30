@@ -15,7 +15,6 @@ export default function validateDeclaration(ast, declaration, parameters, generi
         // Validate all of the scalars and primitives.
         const validationResult = findMatchedType(ast, expectedType, parameter, accum, actualType);
         const matchedType = validationResult && validationResult.matchedType;
-        const newGenerics = validationResult ? validationResult.generics : [];
 
         // Ensure the type is valid and/or a generic type.
         const isTypeValid = Boolean(matchedType || genericType);
@@ -23,7 +22,7 @@ export default function validateDeclaration(ast, declaration, parameters, generi
 
         // Setup the return for the `reduce` function.
         const updatedGenerics = {
-            ...newGenerics,
+            ...(validationResult ? validationResult.generics : []),
             ...(!isGenericType ? accum.generics : { ...accum.generics, [genericType]: actualType })
         };
         const updatedErrors = isTypeValid
