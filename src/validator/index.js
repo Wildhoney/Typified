@@ -50,7 +50,7 @@ function validatePrimitive(type, actualType) {
 }
 
 function validateScalar(scalarType, ast, ...args) {
-    const parseScalar = scalarValidators[scalarType.type] || (() => false);
+    const parseScalar = scalarValidators.get(scalarType.type) || (() => false);
     const newAst = { ...parser.splitTypeDeclaration(scalarType.description), generics: ast.generics };
     return {
         matchedType: `${scalarType.type}(${scalarType.description})`,

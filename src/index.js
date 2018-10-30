@@ -4,6 +4,8 @@ import * as u from './utils.js';
 
 const typeDeclaration = Symbol('@typified/type-declaration');
 
+export { default as scalarValidators } from './scalars/index.js';
+
 export default function type(types, ...expressions) {
     return a => {
         const declaration = u.concatTemplate(types, expressions);
