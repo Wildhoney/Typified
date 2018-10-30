@@ -1,12 +1,12 @@
 import * as parser from '../parser/index.js';
 import * as parserUtils from '../parser/utils.js';
-import * as u from './utils.js';
+import * as u from "./utils.js"
 
 export default function validateDeclaration(declaration, parameters, generics = {}) {
     const ast = parser.splitTypeDeclaration(declaration);
     const initial = { generics, errors: [] };
 
-    const result = parameters.reduce((accum, parameter, index) => {
+    return parameters.reduce((accum, parameter, index) => {
         // Handle the processing of the types.
         const actualType = u.getParameterType(parameter);
         const expectedType = [].concat(accum.generics[ast.types[index]] || ast.types[index]);
@@ -28,13 +28,6 @@ export default function validateDeclaration(declaration, parameters, generics = 
 
         return { ...accum, generics, errors };
     }, initial);
-
-    result.errors.forEach(error => {
-        // Output any errors that were captured above.
-        throw new u.TypeMismatchError(error);
-    });
-
-    return result;
 }
 
 function validateScalar(scalarType, declaration, parameters, generics = {}) {
