@@ -1,6 +1,6 @@
 import * as parser from '../parser/index.js';
 import * as parserUtils from '../parser/utils.js';
-import * as u from "./utils.js"
+import * as u from './utils.js';
 
 export default function validateDeclaration(declaration, parameters, generics = {}) {
     const ast = parser.splitTypeDeclaration(declaration);

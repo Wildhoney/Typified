@@ -1,5 +1,3 @@
-
-
 export function formatTypeMismatchMessage(expectedType, actualType, declaration) {
     return `Expected ${expectedType} in \`${declaration}\` but received ${actualType}.`;
 }
@@ -12,4 +10,3 @@ export function getParameterType(parameter) {
     const nil = parameter == null;
     return nil ? 'void' : parameter.constructor.name;
 }
-
