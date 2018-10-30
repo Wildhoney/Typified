@@ -1,6 +1,6 @@
 # Typified
 
-> An experimental implementation of first class functional types using pure ES at runtime.
+> An experimental implementation of first class functional types using pure ES at runtime, inspired by [Haskell](https://www.haskell.org/), [PureScript](http://www.purescript.org/) and [Idris](https://www.idris-lang.org/).
 
 ![Travis](http://img.shields.io/travis/Wildhoney/Typified.svg?style=for-the-badge)
 &nbsp;
