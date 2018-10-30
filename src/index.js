@@ -1,3 +1,4 @@
+import * as parser from './parser/index.js';
 import validate from './validator/index.js';
 import * as u from './utils.js';
 
@@ -11,7 +12,8 @@ export default function type(types, ...expressions) {
             const f = (...input) => {
                 const output = a(...input);
                 const parameters = [...input, output];
-                const result = validate(declaration, parameters);
+                const ast = parser.splitTypeDeclaration(declaration);
+                const result = validate(ast, declaration, parameters);
 
                 result.errors.forEach(error => {
                     // Output any errors that were captured above.

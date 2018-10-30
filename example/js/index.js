@@ -9,8 +9,8 @@ import ꓽ from '/vendor/index.js';
 // console.log(multiplyByTwo(5));
 
 const sayHello =
-    ꓽ `String -> String`
-    (name => `Hello ${name} !`);
+    ꓽ `String -> Array(String)`
+    (name => [`Hello ${name} !`]);
 
 console.log(sayHello('Adam'));
 

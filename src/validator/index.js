@@ -1,9 +1,8 @@
-import * as parser from '../parser/index.js';
 import * as parserUtils from '../parser/utils.js';
+import scalarValidators from '../scalars/index.js';
 import * as u from './utils.js';
 
-export default function validateDeclaration(declaration, parameters, generics = {}) {
-    const ast = parser.splitTypeDeclaration(declaration);
+export default function validateDeclaration(ast, declaration, parameters, generics = {}) {
     const initial = { generics, errors: [] };
 
     return parameters.reduce((accum, parameter, index) => {
@@ -13,7 +12,7 @@ export default function validateDeclaration(declaration, parameters, generics = 
         const genericType = expectedType.find(type => ast.generics.includes(type));
         const matchedType = expectedType.find(type => {
             const scalarType = parserUtils.maybeParseScalar(type);
-            return scalarType ? validateScalar(scalarType) : type === actualType;
+            return scalarType ? validateScalar(scalarType, ast, parameter, accum.generics) : type === actualType;
         });
 
         // Ensure the type is valid and/or a generic type.
@@ -30,6 +29,7 @@ export default function validateDeclaration(declaration, parameters, generics = 
     }, initial);
 }
 
-function validateScalar(scalarType, declaration, parameters, generics = {}) {
-    return false;
+function validateScalar(scalarType, ...args) {
+    const parseScalar = scalarValidators[scalarType.type] || (() => false);
+    return parseScalar(scalarType, ...args);
 }
