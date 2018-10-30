@@ -1,6 +1,5 @@
 import ꓽ from '/vendor/index.js';
 
-
 // const multiplyBy =
 //     ꓽ `Number -> (Number -> Number)`
 //     (a => b => a * b)
