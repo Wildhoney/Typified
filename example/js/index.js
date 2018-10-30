@@ -9,10 +9,10 @@ import ꓽ from '/vendor/index.js';
 // console.log(multiplyByTwo(5));
 
 const sayHello =
-    ꓽ `String -> Array(String)`
-    (name => [`Hello ${name} !`]);
+    ꓽ `String -> Number -> String`
+    ((name, age) => `${name}! Goodness me you are ${age}!`);
 
-console.log(sayHello('Adam'));
+console.log(sayHello('Adam', 33));
 
 // const flattenHello =
 //     ꓽ `∀ a. Array(a) → a`
