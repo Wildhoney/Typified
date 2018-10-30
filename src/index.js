@@ -11,7 +11,13 @@ export default function type(types, ...expressions) {
             const f = (...input) => {
                 const output = a(...input);
                 const parameters = [...input, output];
-                validate(declaration, parameters);
+                const result = validate(declaration, parameters);
+
+                result.errors.forEach(error => {
+                    // Output any errors that were captured above.
+                    throw new u.TypeMismatchError(error);
+                });
+
                 return output;
             };
 

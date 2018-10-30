@@ -9,3 +9,7 @@ export function concatTemplate(types, expressions) {
         .join('')
         .trim();
 }
+
+export class TypeMismatchError extends Error {}
+
+export class LengthMismatchError extends Error {}
