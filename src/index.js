@@ -2,8 +2,6 @@ import * as parser from './parser/index.js';
 import validate from './validator/index.js';
 import * as u from './utils.js';
 
-const typeDeclaration = Symbol('@typified/type-declaration');
-
 export { default as scalarValidators } from './scalars/index.js';
 
 export default function type(types, ...expressions) {
@@ -25,7 +23,7 @@ export default function type(types, ...expressions) {
                 return output;
             };
 
-            f[typeDeclaration] = declaration;
+            f[u.typeDeclaration] = declaration;
             return f;
         }
 

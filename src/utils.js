@@ -1,3 +1,5 @@
+export const typeDeclaration = Symbol('@typified/type-declaration');
+
 export const isFunction = a => typeof a === 'function';
 
 export function concatTemplate(types, expressions) {
