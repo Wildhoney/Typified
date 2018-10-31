@@ -1,20 +1,17 @@
 import ꓽ from '/vendor/index.js';
 
-// const multiplyBy =
-//     ꓽ `Number -> (Number -> Number)`
-//     (a => b => a * b)
-    
-// const multiplyByTwo = multiplyBy(2);
-// console.log(multiplyByTwo(5));
-
 const sayHello =
     ꓽ `String -> Number -> String`
     ((name, age) => `${name}! Goodness me you are ${age}!`);
 
 console.log(sayHello('Adam', 33));
 
-// const flattenHello =
-//     ꓽ `∀ a. Array(a) → a`
-//     (parts => parts.join(' '));
+// const getHello =
+//     ꓽ `String -> Number -> String`
+//     ((name, age) => `${name}! Goodness me you are ${age}!`);
 
-// console.log(flattenHello(['Hello', "Adam", '!']));
+// const printHello = 
+//     ꓽ `forall a b. a -> ƒ(a -> Number -> String) -> void`
+//     ((name, sayHello) => console.log(sayHello(name, 33)));
+
+// printHello('Adam', getHello);
