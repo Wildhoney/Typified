@@ -1,6 +1,5 @@
 import * as parserUtils from '../parser/utils.js';
-import scalarValidators from '../scalars/index.js';
-import * as parser from '../parser/index.js';
+import * as scalars from '../scalars/index.js';
 import * as u from './utils.js';
 
 export default function validateDeclaration(ast, declaration, parameters, generics = {}) {
@@ -38,21 +37,8 @@ function findMatchedType(ast, expectedType, parameter, accum, actualType) {
         .map(type => {
             const scalarType = parserUtils.maybeParseScalar(type);
             return scalarType
-                ? validateScalar(scalarType, ast, parameter, accum.generics)
-                : validatePrimitive(type, actualType);
+                ? scalars.validate(scalarType, ast, parameter, accum.generics)
+                : { matchedType: type, valid: type === actualType, generics: [] };
         })
         .find(result => result.valid);
-}
-
-function validatePrimitive(type, actualType) {
-    return { matchedType: type, valid: type === actualType, generics: [] };
-}
-
-function validateScalar(scalarType, ast, ...args) {
-    const parseScalar = scalarValidators.get(scalarType.type) || (() => false);
-    const newAst = { ...parser.splitTypeDeclaration(scalarType.description), generics: ast.generics };
-    return {
-        matchedType: `${scalarType.type}(${scalarType.description})`,
-        ...parseScalar(scalarType, newAst, ...args)
-    };
 }
