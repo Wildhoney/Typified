@@ -17,7 +17,9 @@ With Typified you introduce JavaScript to the world of strong typing in a functi
 ```javascript
 import ꓽ from 'typified';
 
-const sayHello = ꓽ `String → String` (name => `Hello ${name}!`);
+const sayHello =
+    ꓽ `String → String`
+    (name => `Hello ${name}!`);
 ```
 
 **Note:** `ꓽ` notation closely resembles how [Idris](https://en.wikipedia.org/wiki/Idris_(programming_language)#Functional_programming) implements types.
@@ -27,7 +29,9 @@ By invoking `sayHello` with a `String` we're guaranteed to be returned a `String
 Typified tries to stay close to the JavaScript world, and thus allows specifying the union operator (`|`) to accept multiple types. For instance our `sayHello` function could take a `Number` type as well and be perfectly fine, as it's not performing any `String`-specific operations &ndash; thus we could augment the types to allow `Number` to be passed too.
 
 ```javascript
-const sayHello = ꓽ `String|Number → String` (name => `Hello ${name}!`);
+const sayHello =
+    ꓽ `String|Number → String`
+    (name => `Hello ${name}!`);
 ```
 
 Invoking `sayHello` with a `Number` type would be just as fine as invoking it with a `String`.
