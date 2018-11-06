@@ -21,9 +21,12 @@ export default function handleArray(ast, declaration, parameters, generics) {
         };
     }, initial);
 
+    const type = `Array(${Array.from(new Set(results.types)).join(', ')})`;
+
     return {
+        type,
         isValid: results.isValid,
         generics: results.generics,
-        type: `Array(${Array.from(new Set(results.types)).join(', ')})`
+        feedback: type.length > 1 && 'Array values must be of a single type'
     };
 }

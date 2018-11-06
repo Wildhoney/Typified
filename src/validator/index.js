@@ -6,7 +6,7 @@ export default function validateDeclaration(ast, declaration, parameters, generi
     return [].concat(parameters).reduce((accum, parameter, index) => {
         // Handle the processing of the types.
         const declaredTypes = ast.types[index];
-        const [actualType, newGenerics] = u.getParameterType(ast, declaredTypes, parameter, accum.generics);
+        const [actualType, newGenerics, feedback] = u.getParameterType(ast, declaredTypes, parameter, accum.generics);
         const expectedType = [].concat(accum.generics[declaredTypes] || declaredTypes);
         const matchedTypeIndex = expectedType.findIndex(type => type === actualType);
         const genericTypeIndex = expectedType.findIndex(type => ast.generics.includes(type));
@@ -27,7 +27,7 @@ export default function validateDeclaration(ast, declaration, parameters, generi
         };
         const updatedErrors = isTypeValid
             ? accum.errors
-            : [...accum.errors, u.formatTypeMismatchMessage(expectedType, actualType, declaration)];
+            : [...accum.errors, u.formatTypeMismatchMessage(expectedType, actualType, declaration, feedback)];
 
         return { ...accum, type: updatedType, generics: updatedGenerics, errors: updatedErrors };
     }, initial);

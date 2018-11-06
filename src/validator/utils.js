@@ -1,7 +1,8 @@
-import scalars from './scalars/index.js'
+import scalars from './scalars/index.js';
 
-export function formatTypeMismatchMessage(expectedType, actualType, declaration) {
-    return `Expected ${expectedType} in \`${declaration}\` but received ${actualType}.`;
+export function formatTypeMismatchMessage(expectedType, actualType, declaration, feedback) {
+    const message = `Expected ${expectedType} in \`${declaration}\` but received ${actualType}`;
+    return feedback ? `${message} (Feedback: ${feedback}).` : `${message}.`;
 }
 
 export function formatLengthMismatchMessage(expectedCount, actualCount, declaration) {
@@ -22,12 +23,11 @@ export function getPrimitiveType(parameter) {
 export function getParameterType(ast, declarations, parameter, generics) {
     const results = declarations.map(declaration => {
         const scalar = getScalarAst(declaration);
-        const type = getPrimitiveType(parameter)
+        const type = getPrimitiveType(parameter);
         if (!scalar) return { type };
-        const f = scalars.get(scalar.type) || (() => ({type}));
+        const f = scalars.get(scalar.type) || (() => ({ type }));
         return f(ast, declaration, parameter, generics);
     });
     const result = results.find(({ isValid }) => isValid);
-    return result ? [result.type, result.generics] : [results[0].type, {}];
+    return result ? [result.type, result.generics, null] : [results[0].type, {}, results[0].feedback];
 }
-
