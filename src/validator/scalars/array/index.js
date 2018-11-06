@@ -4,6 +4,15 @@ import validateDeclaration from '../../index.js';
 
 export default function handleArray(ast, declaration, parameters, generics) {
     const initial = { isValid: true, types: [], generics };
+
+    if (!Array.isArray(parameters)) {
+        return {
+            type: u.getPrimitiveType(parameters),
+            isValid: false,
+            feedback: 'Expected an array but received a primitive'
+        };
+    }
+
     const results = parameters.reduce((accum, parameter) => {
         const scalar = u.getScalarAst(declaration);
         const newAst = parserUtils.splitTypeDeclaration(scalar.declaration);
