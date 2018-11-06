@@ -2,7 +2,7 @@ import * as parser from './parser/index.js';
 import validate from './validator/index.js';
 import * as u from './utils.js';
 
-export { validators } from './scalars/index.js';
+// export { validators } from './scalars/index.js';
 
 export default function type(types, ...expressions) {
     return a => {

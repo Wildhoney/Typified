@@ -1,44 +1,34 @@
-import * as parserUtils from '../parser/utils.js';
-import * as scalars from '../scalars/index.js';
 import * as u from './utils.js';
 
 export default function validateDeclaration(ast, declaration, parameters, generics = {}) {
-    const initial = { generics, errors: [] };
+    const initial = { type: null, generics, errors: [] };
 
     return [].concat(parameters).reduce((accum, parameter, index) => {
         // Handle the processing of the types.
-        const actualType = u.getParameterType(parameter);
-        const expectedType = [].concat(accum.generics[ast.types[index]] || ast.types[index]);
-        const genericType = expectedType.find(type => ast.generics.includes(type));
-
-        // Validate all of the scalars and primitives.
-        const validationResult = findMatchedType(ast, expectedType, parameter, accum, actualType);
-        const matchedType = validationResult && validationResult.matchedType;
+        const declaredTypes = ast.types[index];
+        const [actualType, newGenerics] = u.getParameterType(ast, declaredTypes, parameter, accum.generics);
+        const expectedType = [].concat(accum.generics[declaredTypes] || declaredTypes);
+        const matchedTypeIndex = expectedType.findIndex(type => type === actualType);
+        const genericTypeIndex = expectedType.findIndex(type => ast.generics.includes(type));
+        const matchedType = expectedType[matchedTypeIndex];
+        const genericType = expectedType[genericTypeIndex];
 
         // Ensure the type is valid and/or a generic type.
         const isTypeValid = Boolean(matchedType || genericType);
         const isGenericType = Boolean(genericType);
+        const resolvedType = declaredTypes[matchedTypeIndex] || declaredTypes[genericTypeIndex];
 
         // Setup the return for the `reduce` function.
+        const updatedType = isTypeValid ? resolvedType : actualType;
         const updatedGenerics = {
-            ...(validationResult ? validationResult.generics : []),
+            ...generics,
+            ...newGenerics,
             ...(!isGenericType ? accum.generics : { ...accum.generics, [genericType]: actualType })
         };
         const updatedErrors = isTypeValid
             ? accum.errors
             : [...accum.errors, u.formatTypeMismatchMessage(expectedType, actualType, declaration)];
 
-        return { ...accum, generics: updatedGenerics, errors: updatedErrors };
+        return { ...accum, type: updatedType, generics: updatedGenerics, errors: updatedErrors };
     }, initial);
-}
-
-function findMatchedType(ast, expectedType, parameter, accum, actualType) {
-    return expectedType
-        .map(type => {
-            const scalarType = parserUtils.maybeParseScalar(type);
-            return scalarType
-                ? scalars.validate(scalarType, ast, parameter, accum.generics)
-                : { matchedType: type, valid: type === actualType, generics: [] };
-        })
-        .find(result => result.valid);
 }

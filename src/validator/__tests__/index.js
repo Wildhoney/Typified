@@ -8,7 +8,8 @@ test('It should be able to validate a simple typed function;', t => {
     const parameters = ['Hello', 'Adam', 'Hello, Adam!'];
     t.deepEqual(validate(ast, declaration, parameters), {
         generics: {},
-        errors: []
+        errors: [],
+        type: 'String'
     });
 });
 
@@ -18,7 +19,8 @@ test('It should be able to validate a simple typed function with an alias;', t =
     const parameters = ['Hello', 'Adam', 33, 'Hello Adam. You are 33.'];
     t.deepEqual(validate(ast, declaration, parameters), {
         generics: {},
-        errors: []
+        errors: [],
+        type: 'String'
     });
 });
 
@@ -29,7 +31,8 @@ test('It should be able to validate a simple union typed function;', t => {
     parameters.forEach(parameters =>
         t.deepEqual(validate(ast, declaration, parameters), {
             generics: {},
-            errors: []
+            errors: [],
+            type: 'String'
         })
     );
 });
@@ -40,7 +43,8 @@ test('It should be able to validate a simple generic typed function;', t => {
     const parameters = ['Hello', 'Adam', 'Hello, Adam!'];
     t.deepEqual(validate(ast, declaration, parameters), {
         generics: { a: 'String' },
-        errors: []
+        errors: [],
+        type: 'a'
     });
 });
 
@@ -50,7 +54,8 @@ test('It should be able to validate a generic a more complex generic function;',
     const parameters = ['Adam', 'Maria', 33, 28, 'Hello Adam & Maria. You are 33 and 28.'];
     t.deepEqual(validate(ast, declaration, parameters), {
         generics: { a: 'String', b: 'Number' },
-        errors: []
+        errors: [],
+        type: 'a'
     });
 });
 
@@ -60,7 +65,8 @@ test('It should be able to validate a scalar typed function;', t => {
     const parameters = [['Adam', 'Maria'], 'Hello Adam & Maria!'];
     t.deepEqual(validate(ast, declaration, parameters), {
         generics: {},
-        errors: []
+        errors: [],
+        type: 'String'
     });
 });
 
@@ -70,6 +76,7 @@ test('It should be able to validate a scalar typed function with generics added 
     const parameters = [['Adam', 'Maria'], [33, 28], 'Hello Adam & Maria. You are 33 and 28.'];
     t.deepEqual(validate(ast, declaration, parameters), {
         generics: { a: 'String', b: 'Number' },
-        errors: []
+        errors: [],
+        type: 'a'
     });
 });
