@@ -13,9 +13,9 @@ export default function handleArray(ast, declaration, parameters, generics) {
         };
     }
 
+    const scalar = u.getScalarAst(declaration);
+    const newAst = parserUtils.splitTypeDeclaration(scalar.declaration);
     const results = parameters.reduce((accum, parameter) => {
-        const scalar = u.getScalarAst(declaration);
-        const newAst = parserUtils.splitTypeDeclaration(scalar.declaration);
         const updatedAst = {
             ...newAst,
             aliases: ast.aliases,
