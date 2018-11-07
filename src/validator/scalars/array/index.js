@@ -21,7 +21,7 @@ export default function handleArray(ast, declaration, parameters, generics) {
             aliases: ast.aliases,
             generics: ast.generics
         };
-        const result = validateDeclaration(updatedAst, scalar.declaration, [].concat(parameter), accum.generics);
+        const result = validateDeclaration(updatedAst, scalar.declaration, [parameter], accum.generics);
         return {
             ...accum,
             isValid: accum.isValid ? result.errors.length === 0 : false,
