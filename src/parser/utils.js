@@ -29,6 +29,28 @@ export function balanceBrackets(type, accum, aliases) {
     }
 }
 
+export function splitTopLevel(value, character) {
+    const letters = value.split('');
+
+    return letters.reduce(
+        (accum, letter, index) => {
+            const end = letters.length - 1 === index;
+            const depth = calculateDepth(letter, accum);
+            const split = (letter === character && depth === 0) || end;
+
+            const segments = split ? [...accum.segments, accum.current.trim() + (end ? letter : '')] : accum.segments;
+            const current = split ? '' : `${accum.current}${letter}`;
+
+            return { ...accum, segments, depth, current };
+        },
+        { segments: [], depth: 0, current: '' }
+    ).segments;
+}
+
+function calculateDepth(letter, accum) {
+    return letter === '(' ? accum.depth + 1 : letter === ')' ? accum.depth - 1 : accum.depth;
+}
+
 function getBracketCounts(type) {
     return {
         open: (type.match(/\(/g) || []).length,
