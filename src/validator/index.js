@@ -13,12 +13,11 @@ export default function validateDeclaration(ast, declaration, parameters, generi
         const matchedType = expectedType[matchedTypeIndex];
         const genericType = expectedType[genericTypeIndex];
 
-        
         // Ensure the type is valid and/or a generic type.
         const isTypeValid = Boolean(matchedType || genericType);
         const isGenericType = Boolean(genericType);
         const resolvedType = declaredTypes[matchedTypeIndex] || declaredTypes[genericTypeIndex];
-        
+
         // Setup the return for the `reduce` function.
         const updatedType = isTypeValid ? resolvedType : actualType;
         const updatedGenerics = {

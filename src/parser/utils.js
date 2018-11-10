@@ -20,8 +20,7 @@ export function balanceBrackets(accum, type, aliases) {
                 ...newAccum,
                 groups: [
                     ...accum.groups,
-                    splitTopLevel(type.trim(), '|')
-                        .map(type => (aliases[type.trim()] || type).trim())
+                    splitTopLevel(type.trim(), '|').map(type => (aliases[type.trim()] || type).trim())
                 ]
             };
     }
