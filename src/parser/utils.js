@@ -4,7 +4,7 @@ export function getScalarAst(declaration) {
     return isScalar ? declaration.match(r).groups : null;
 }
 
-export function balanceBrackets(type, accum, aliases) {
+export function balanceBrackets(accum, type, aliases) {
     const counts = getBracketCounts(type);
     const bracketCount = accum.bracketCount + counts.open - counts.close;
     const newAccum = { ...accum, bracketCount, inBrackets: bracketCount !== 0 };
@@ -20,9 +20,7 @@ export function balanceBrackets(type, accum, aliases) {
                 ...newAccum,
                 groups: [
                     ...accum.groups,
-                    type
-                        .trim()
-                        .split('|')
+                    splitTopLevel(type.trim(), '|')
                         .map(type => (aliases[type.trim()] || type).trim())
                 ]
             };
