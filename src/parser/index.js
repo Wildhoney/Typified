@@ -18,7 +18,7 @@ export function parseAliases(declaration) {
 export function parseTypes(declaration, aliases = {}) {
     const initial = { groups: [], bracketCount: 0, inBrackets: false };
     return [...declaration.matchAll(/\s*(\(.+?\)|.+?)\s*(?:(?:→|->)|$)/gu)].reduce(
-        (accum, [, type]) => u.balanceBrackets(type, accum, aliases),
+        (accum, [, type]) => u.balanceBrackets(accum, type, aliases),
         initial
     ).groups;
 }
