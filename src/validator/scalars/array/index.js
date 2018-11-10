@@ -1,4 +1,4 @@
-import * as parserUtils from '../../../parser/index.js';
+import * as parser from '../../../parser/index.js';
 import * as u from '../../utils.js';
 import validateDeclaration from '../../index.js';
 
@@ -14,7 +14,7 @@ export default function handleArray(ast, declaration, parameters, generics) {
     }
 
     const scalar = u.getScalarAst(declaration);
-    const newAst = parserUtils.splitTypeDeclaration(scalar.declaration);
+    const newAst = parser.splitTypeDeclaration(scalar.declaration);
     const results = parameters.reduce((accum, parameter) => {
         const updatedAst = {
             ...newAst,
@@ -30,12 +30,12 @@ export default function handleArray(ast, declaration, parameters, generics) {
         };
     }, initial);
 
-    const type = `Array(${Array.from(new Set(results.types)).join(', ')})`;
+    const type = results.isValid ? declaration : `Array(${Array.from(new Set(results.types)).join(', ')})`;
 
     return {
         type,
         isValid: results.isValid,
         generics: results.generics,
-        feedback: type.length > 1 && 'Array values must be of a single type'
+        feedback: results.types.length > 1 && 'Array values must be of a single type'
     };
 }
