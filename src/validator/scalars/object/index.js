@@ -6,15 +6,20 @@ export default function handleObject(ast, declaration, parameters, generics) {
     const initial = { isValid: true, types: [], generics };
 
     const scalar = u.getScalarAst(declaration);
-    const types = parserUtils.splitTopLevel(scalar.declaration, ',').map(a => a.trim());
-
-    const results = types.reduce((accum, type) => {
+    const types = parserUtils.splitTopLevel(scalar.declaration, ',').reduce((accum, declaration) => {
+        const type = declaration.trim();
         const { groups } = type.match(/(?<key>.+?):(?<value>.+)/i);
-        const [key, expectedType] = [groups.key.trim(), groups.value.trim()];
-        const types = parserUtils.splitTopLevel(expectedType, '|');
-        const parameter = parameters[key];
+        return { ...accum, [groups.key.trim()]: groups.value.trim() };
+    }, {});
+
+    const results = Object.entries(parameters).reduce((accum, [key, parameter], index) => {
+        if (!(key in types)) {
+            return { ...accum, isValid: false };
+        }
+
+        const expectedType = types[key];
         const updatedAst = {
-            types: [types],
+            types: [parserUtils.splitTopLevel(expectedType, '|')],
             aliases: ast.aliases,
             generics: ast.generics
         };
