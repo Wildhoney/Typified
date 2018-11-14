@@ -1,5 +1,5 @@
 import test from 'ava';
-import createValidator from '../index.js';
+import { createValidator} from '../index.js';
 import * as parser from '../../parser/index.js';
 
 test('It should be able to validate union types;', t => {

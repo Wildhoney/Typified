@@ -1,5 +1,5 @@
 import * as parser from './parser/index.js';
-import validate from './validator/index.js';
+import { createValidator } from './validator/index.js';
 import * as u from './utils.js';
 
 // export { validators } from './scalars/index.js';
@@ -13,7 +13,7 @@ export default function type(types, ...expressions) {
                 const output = a(...input);
                 const parameters = [...input, output];
                 const ast = parser.splitTypeDeclaration(declaration);
-                const result = validate(ast, declaration, parameters);
+                const result = createValidator(ast, declaration, parameters);
 
                 result.errors.forEach(error => {
                     // Output any errors that were captured above.

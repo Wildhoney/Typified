@@ -1,6 +1,6 @@
 import * as u from './utils.js';
 
-export default function createValidator(ast, declaration) {
+export function createValidator(ast, declaration) {
     return function(types, value, generics = {}) {
         const expectedTypes = types.map(type => generics[type] || type);
         const actualType = u.getPrimitiveType(value);
@@ -17,6 +17,16 @@ export default function createValidator(ast, declaration) {
             error: isTypeValid ? null : u.formatTypeMismatchMessage(expectedTypes, actualType, declaration)
         };
     };
+}
+
+export function produceValidationReport(validatorFn,types,values,generics= {}) {
+
+    return types.reduce((accum, type, index) =>{
+        const value = values[index]
+        const report = validatorFn(type, value, accum.generics)
+        return { reports: [...accum.reports, report], generics: {...accum.generics, ...report.generics} }
+    }, { reports: [], generics })
+
 }
 
 // export default function validateDeclaration(ast, declaration, parameters, generics = {}) {
