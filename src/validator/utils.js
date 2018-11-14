@@ -1,7 +1,9 @@
 import scalars from './scalars/index.js';
 
-export function formatTypeMismatchMessage(expectedType, actualType, declaration, feedback) {
-    const message = `Expected ${expectedType} in \`${declaration}\` but received ${actualType}`;
+export function formatTypeMismatchMessage(expectedTypes, actualType, declaration, feedback) {
+    const message = `Expected ${expectedTypes.join(
+        ' or '
+    )} in \`${declaration}\` declaration but received ${actualType}`;
     return feedback ? `${message} (Feedback: ${feedback}).` : `${message}.`;
 }
 

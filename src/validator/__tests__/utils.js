@@ -3,17 +3,17 @@ import * as validatorUtils from '../utils.js';
 
 test('It should be able to format the type mismatch and length messages;', t => {
     t.is(
-        validatorUtils.formatTypeMismatchMessage('String', 'Number', 'Array(String) -> Date -> String'),
-        'Expected String in `Array(String) -> Date -> String` but received Number.'
+        validatorUtils.formatTypeMismatchMessage(['String'], 'Number', 'Array(String) -> Date -> String'),
+        'Expected String in `Array(String) -> Date -> String` declaration but received Number.'
     );
     t.is(
         validatorUtils.formatTypeMismatchMessage(
-            'String',
+            ['String'],
             'Number',
             'Array(String) -> Date -> String',
             'Array values must be of a single type'
         ),
-        'Expected String in `Array(String) -> Date -> String` but received Number (Feedback: Array values must be of a single type).'
+        'Expected String in `Array(String) -> Date -> String` declaration but received Number (Feedback: Array values must be of a single type).'
     );
     t.is(
         validatorUtils.formatLengthMismatchMessage(3, 2, 'Number -> String -> Date'),
