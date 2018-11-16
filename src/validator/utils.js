@@ -17,6 +17,10 @@ export function getScalarAst(declaration) {
     return isScalar ? declaration.match(r).groups : null;
 }
 
+export function isScalar(type) {
+    return Boolean(getScalarAst(type));
+}
+
 export function getPrimitiveType(parameter) {
     const nil = parameter == null;
     return nil ? 'void' : parameter.constructor.name;

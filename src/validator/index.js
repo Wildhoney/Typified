@@ -1,12 +1,13 @@
 import * as u from './utils.js';
 
 export function createValidator(ast, declaration) {
-    
     return function validatorFn(types, value, generics = {}) {
         const expectedTypes = types.map(type => generics[type] || type);
         const actualType = u.getPrimitiveType(value);
-        const matchedType = expectedTypes.find(expectedType => expectedType === actualType);
         const genericType = expectedTypes.find(expectedType => ast.generics.includes(expectedType));
+        const matchedType = expectedTypes.find(expectedType => {
+            return u.isScalar(expectedType) ? handleScalar(expectedType) : expectedType === actualType;
+        });
 
         const isTypeValid = Boolean(matchedType || genericType);
         const updatedGenerics = { ...generics, ...(isTypeValid && genericType && { [genericType]: actualType }) };
@@ -18,17 +19,17 @@ export function createValidator(ast, declaration) {
             error: isTypeValid ? null : u.formatTypeMismatchMessage(expectedTypes, actualType, declaration)
         };
     };
-    
 }
 
-export function produceValidationReport(validatorFn,types,values,generics= {}) {
-
-    return types.reduce((accum, type, index) =>{
-        const value = values[index]
-        const report = validatorFn(type, value, accum.generics)
-        return { reports: [...accum.reports, report], generics: {...accum.generics, ...report.generics} }
-    }, { reports: [], generics })
-
+export function produceValidationReport(validatorFn, types, values, generics = {}) {
+    return types.reduce(
+        (accum, type, index) => {
+            const value = values[index];
+            const report = validatorFn(type, value, accum.generics);
+            return { reports: [...accum.reports, report], generics: { ...accum.generics, ...report.generics } };
+        },
+        { reports: [], generics }
+    );
 }
 
 // export default function validateDeclaration(ast, declaration, parameters, generics = {}) {
