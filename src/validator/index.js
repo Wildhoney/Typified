@@ -2,18 +2,17 @@ import * as u from './utils.js';
 import { handleScalar } from '../scalar/index.js';
 
 export function createValidator(ast, declaration) {
-    return function validatorFn(types, value, generics = {}) {
+    return function validatorFn(types, value, generics = {}, actualType = u.getPrimitiveType(value)) {
         // Map each of the expected types by inspecting the generics and the defined aliases, otherwise the
         // type as it's passed is taken. We also determine the primitive type of the value, which may or may
         // not be a scalar type at this point.
         const expectedTypes = types.map(type => generics[type] || ast.aliases[type] || type);
-        const actualType = u.getPrimitiveType(value);
 
         // Find the indices that match either the generic type or the concrete type, recursing when
         // a scalar is found by delegating to the correct scalar validator, if it exists.
         const matchedResults = expectedTypes.map(expectedType => {
             return u.isScalar(expectedType)
-                ? handleScalar(validatorFn, expectedType, value, generics)
+                ? handleScalar(validatorFn, expectedType, value, generics, actualType)
                 : { valid: expectedType === actualType };
         });
         const matchedTypeIndex = matchedResults.findIndex(result => result.valid);

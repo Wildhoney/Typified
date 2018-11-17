@@ -1,6 +1,7 @@
 import test from 'ava';
-import { createValidator } from '../index.js';
 import * as parser from '../../parser/index.js';
+import defineType from '../../index.js';
+import { createValidator } from '../index.js';
 
 test('It should be able to validate declarations with concrete types;', t => {
     const declaration = 'String|Number';
@@ -130,5 +131,19 @@ test('It should be able to validate declarations with object types;', t => {
         type: 'String',
         generics: {},
         error: `Expected Object(name: s, age: Number) in \`${declaration}\` declaration but received String.`
+    });
+});
+
+test('It should be able to validate declarations with simple function types;', t => {
+    const declaration = '(String -> Number -> String)';
+    const ast = parser.splitTypeDeclaration(declaration);
+    const validate = createValidator(ast, declaration);
+    const expectedTypes = ast.types[0];
+    const greetingsFn = defineType`String -> Number -> String`((name, age) => `Hello ${name}! You are ${age}.`);
+    t.deepEqual(validate(expectedTypes, greetingsFn), {
+        valid: true,
+        type: '(String -> Number -> String)',
+        generics: {},
+        error: null
     });
 });
