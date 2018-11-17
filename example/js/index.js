@@ -4,4 +4,8 @@ const getHello =
     ꓽ `String -> Number -> String`
     ((name, age) => `${name}! Goodness me you are ${age}!`);
 
-console.log(getHello('Adam', 33));
+const printAdam =
+    ꓽ `(String -> Number|String -> String) -> void`
+    (helloFn => console.log(helloFn('Adam', 33)));
+
+printAdam(getHello);
