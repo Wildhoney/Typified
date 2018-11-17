@@ -88,10 +88,10 @@ test('It should be able to validate declarations with scalar types;', t => {
         generics: {},
         error: null
     });
-    // t.deepEqual(validate(expectedTypes, ['Adam', 33]), {
-    //     valid: false,
-    //     type: 'Array(s)',
-    //     generics: {},
-    //     error: `Expected String in \`${declaration}\` declaration but received Array(String, Number).`
-    // });
+    t.deepEqual(validate(expectedTypes, ['Adam', 33]), {
+        valid: false,
+        type: 'Array',
+        generics: {},
+        error: `Expected Array(s) in \`${declaration}\` declaration but received Array.`
+    });
 });
