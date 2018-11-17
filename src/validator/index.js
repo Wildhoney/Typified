@@ -52,7 +52,7 @@ export function createValidator(ast, declaration) {
 }
 
 export function produceValidationReport(validatorFn, types, values, generics = {}) {
-    return types.reduce(
+    const result = types.reduce(
         (accum, type, index) => {
             const value = values[index];
             const report = validatorFn(type, value, accum.generics);
@@ -60,4 +60,14 @@ export function produceValidationReport(validatorFn, types, values, generics = {
         },
         { reports: [], generics }
     );
+
+    const firstInvalidReport = result.reports.find(report => !report.valid);
+    const error = firstInvalidReport ? firstInvalidReport.error : null;
+
+    return {
+        valid: result.reports.every(report => report.valid),
+        reports: result.reports,
+        generics: result.generics,
+        error
+    };
 }
