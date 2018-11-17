@@ -139,11 +139,29 @@ test('It should be able to validate declarations with simple function types;', t
     const ast = parser.splitTypeDeclaration(declaration);
     const validate = createValidator(ast, declaration);
     const expectedTypes = ast.types[0];
-    const greetingsFn = defineType`String -> Number -> String`((name, age) => `Hello ${name}! You are ${age}.`);
-    t.deepEqual(validate(expectedTypes, greetingsFn), {
-        valid: true,
-        type: '(String -> Number -> String)',
-        generics: {},
-        error: null
-    });
+    t.deepEqual(
+        validate(
+            expectedTypes,
+            defineType`String -> Number -> String`((name, age) => `Hello ${name}! You are ${age}.`)
+        ),
+        {
+            valid: true,
+            type: '(String -> Number -> String)',
+            generics: {},
+            error: null
+        }
+    );
+    t.deepEqual(
+        validate(
+            expectedTypes,
+            defineType`String -> String -> String`((name, age) => `Hello ${name}! You are ${age}.`)
+        ),
+        {
+            valid: false,
+            type: 'Function',
+            generics: {},
+            error:
+                'Expected (String -> Number -> String) in `(String -> Number -> String)` declaration but received (String -> String -> String).'
+        }
+    );
 });

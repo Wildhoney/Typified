@@ -8,7 +8,7 @@ export default function handleFunction(validatorFn, ast, fn, generics) {
 
     const sourceAst = splitTypeDeclaration(ast.declaration);
     const destinationAst = splitTypeDeclaration(fn[typeDeclaration]);
-    const initial = { valid: true, generics };
+    const initial = { valid: true, generics: {} };
     const result = destinationAst.types.reduce((accum, expectedTypes, index) => {
         const result = expectedTypes
             .map(expectedType => {
