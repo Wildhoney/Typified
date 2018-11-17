@@ -1,24 +1,16 @@
-// import scalars from './scalars/index.js';
+import { parseScalar } from '../scalar/utils.js';
 
-export function formatTypeMismatchMessage(expectedTypes, actualType, declaration, feedback) {
-    const message = `Expected ${expectedTypes.join(
-        ' or '
-    )} in \`${declaration}\` declaration but received ${actualType}`;
-    return feedback ? `${message} (Feedback: ${feedback}).` : `${message}.`;
+export function formatTypeMismatchMessage(expectedTypes, actualType, declaration, message) {
+    const value = `Expected ${expectedTypes.join(' or ')} in \`${declaration}\` declaration but received ${actualType}`;
+    return message ? `${value} (${message}).` : `${value}.`;
 }
 
 export function formatLengthMismatchMessage(expectedCount, actualCount, declaration) {
     return `Expected ${expectedCount} function parameters but received ${actualCount} in \`${declaration}\`.`;
 }
 
-export function getScalarAst(declaration) {
-    const r = /^(?<type>.+?)\((?<declaration>.+?)\)$/i;
-    const isScalar = r.test(declaration);
-    return isScalar ? declaration.match(r).groups : null;
-}
-
 export function isScalar(type) {
-    return Boolean(getScalarAst(type));
+    return Boolean(parseScalar(type));
 }
 
 export function getPrimitiveType(parameter) {

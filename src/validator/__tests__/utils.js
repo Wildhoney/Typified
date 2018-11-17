@@ -13,7 +13,7 @@ test('It should be able to format the type mismatch and length messages;', t => 
             'Array(String) -> Date -> String',
             'Array values must be of a single type'
         ),
-        'Expected String in `Array(String) -> Date -> String` declaration but received Number (Feedback: Array values must be of a single type).'
+        'Expected String in `Array(String) -> Date -> String` declaration but received Number (Array values must be of a single type).'
     );
     t.is(
         validatorUtils.formatLengthMismatchMessage(3, 2, 'Number -> String -> Date'),

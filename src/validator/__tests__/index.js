@@ -65,7 +65,7 @@ test('It should be able to validate declarations with generic types;', t => {
     });
     t.deepEqual(validate(expectedTypes, 'Adam', { a: 'String' }), {
         valid: true,
-        type: 'String',
+        type: 'a',
         generics: { a: 'String' },
         error: null
     });
@@ -77,15 +77,21 @@ test('It should be able to validate declarations with generic types;', t => {
     });
 });
 
-// test('It should be able to validate declarations with scalar types;', t => {
-//     const declaration = 'String s => Array(s)';
-//     const ast = parser.splitTypeDeclaration(declaration);
-//     const validate = createValidator(ast, declaration);
-//     const expectedTypes = ast.types[0];
-//     t.deepEqual(validate(expectedTypes, ['Adam']), {
-//         valid: true,
-//         type: 'Array(s)',
-//         generics: {},
-//         error: null
-//     });
-// });
+test('It should be able to validate declarations with scalar types;', t => {
+    const declaration = 'String s => Array(s)';
+    const ast = parser.splitTypeDeclaration(declaration);
+    const validate = createValidator(ast, declaration);
+    const expectedTypes = ast.types[0];
+    t.deepEqual(validate(expectedTypes, ['Adam']), {
+        valid: true,
+        type: 'Array(s)',
+        generics: {},
+        error: null
+    });
+    // t.deepEqual(validate(expectedTypes, ['Adam', 33]), {
+    //     valid: false,
+    //     type: 'Array(s)',
+    //     generics: {},
+    //     error: `Expected String in \`${declaration}\` declaration but received Array(String, Number).`
+    // });
+});
