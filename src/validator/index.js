@@ -41,7 +41,12 @@ export function createValidator(ast, declaration) {
             generics: updatedGenerics,
             error: isTypeValid
                 ? null
-                : u.formatTypeMismatchMessage(expectedTypes, actualType, declaration, scalarResults.message)
+                : u.formatTypeMismatchMessage(
+                      expectedTypes,
+                      u.determineActualType(value),
+                      declaration,
+                      scalarResults.message
+                  )
         };
     };
 }

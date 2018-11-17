@@ -13,19 +13,17 @@ export function isScalar(type) {
     return Boolean(parseScalar(type));
 }
 
-export function getPrimitiveType(parameter) {
-    const nil = parameter == null;
-    return nil ? 'void' : parameter.constructor.name;
+export function getPrimitiveType(value) {
+    const nil = value == null;
+    return nil ? 'void' : value.constructor.name;
 }
 
-// export function getParameterType(ast, declarations, parameter, generics) {
-//     const results = declarations.map(declaration => {
-//         const scalar = getScalarAst(declaration);
-//         const type = getPrimitiveType(parameter);
-//         if (!scalar) return { type };
-//         const f = scalars.get(scalar.type) || (() => ({ type }));
-//         return f(ast, declaration, parameter, generics);
-//     });
-//     const result = results.find(({ isValid }) => isValid);
-//     return result ? [result.type, result.generics, null] : [results[0].type, {}, results[0].feedback];
-// }
+export function determineActualType(value) {
+    if (Array.isArray(value)) {
+        const collection = value;
+        const types = collection.map(determineActualType);
+        return `Array(${Array.from(new Set(types)).join(', ')})`;
+    }
+
+    return getPrimitiveType(value);
+}

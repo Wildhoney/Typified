@@ -92,6 +92,6 @@ test('It should be able to validate declarations with scalar types;', t => {
         valid: false,
         type: 'Array',
         generics: {},
-        error: `Expected Array(s) in \`${declaration}\` declaration but received Array.`
+        error: `Expected Array(s) in \`${declaration}\` declaration but received Array(String, Number).`
     });
 });
