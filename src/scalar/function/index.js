@@ -2,6 +2,10 @@ import { splitTypeDeclaration } from '../../parser/index.js';
 import { typeDeclaration } from '../../utils.js';
 
 export default function handleFunction(validatorFn, ast, fn, generics) {
+    if (!fn[typeDeclaration]) {
+        return { valid: true };
+    }
+
     const sourceAst = splitTypeDeclaration(ast.declaration);
     const destinationAst = splitTypeDeclaration(fn[typeDeclaration]);
     const initial = { valid: true, generics };
