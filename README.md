@@ -1,4 +1,4 @@
-# Typified
+<img src="media/logo.png" alt="Typified" width="300" />
 
 > An experimental implementation of first class functional types using pure ES at runtime, inspired by [Haskell](https://www.haskell.org/), [PureScript](http://www.purescript.org/) and [Idris](https://www.idris-lang.org/).
 
