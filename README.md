@@ -38,8 +38,9 @@ Typified also supports to the concept of [generics](https://en.wikipedia.org/wik
 const sayHello =
     ꓽ `String → String → String`
     ((firstName, secondName) => {
-        const isSame = firstName === secondName;
-        return isSame ? `Hello ${firstName}!` : `Hello ${firstName} & ${secondName}!`;
+        return firstName === secondName
+            ? `Hello ${firstName}!`
+            : `Hello ${firstName} & ${secondName}!`;
     });
 ```
 
@@ -51,8 +52,9 @@ You might be tempted to define the type as `String|Number → String|Number → 
 const sayHello =
     ꓽ `∀ a. a → a → String`
     ((firstName, secondName) => {
-        const isSame = firstName === secondName;
-        return isSame ? `Hello ${firstName}!` : `Hello ${firstName} & ${secondName}!`;
+        return firstName === secondName
+            ? `Hello ${firstName}!`
+            : `Hello ${firstName} & ${secondName}!`;
     });
 ```
 
