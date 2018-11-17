@@ -19,10 +19,19 @@ export function getPrimitiveType(value) {
 }
 
 export function determineActualType(value) {
-    if (Array.isArray(value)) {
+    const isArrayLike = Array.isArray(value);
+    const isObjectLike = value instanceof Object && Object.keys(value).length > 0;
+
+    if (isArrayLike) {
         const collection = value;
         const types = collection.map(determineActualType);
         return `Array(${Array.from(new Set(types)).join(', ')})`;
+    }
+
+    if (isObjectLike) {
+        const model = value;
+        const types = Object.entries(model).map(([key, value]) => `${key}: ${determineActualType(value)}`);
+        return `${getPrimitiveType(value)}(${types.join(', ')})`;
     }
 
     return getPrimitiveType(value);
