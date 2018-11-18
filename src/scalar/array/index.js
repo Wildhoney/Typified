@@ -1,6 +1,6 @@
 import { splitTopLevel } from '../../parser/utils.js';
 
-export default function handleArray(validatorFn, ast, collection, generics) {
+export function validateArray(validatorFn, ast, collection, generics) {
     const initial = { valid: true, generics };
 
     return Array.isArray(collection)
