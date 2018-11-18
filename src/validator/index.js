@@ -15,7 +15,7 @@ export function createValidator(ast, declaration) {
                 ? handleScalar(validatorFn, expectedType, value, generics, actualType)
                 : { valid: expectedType === actualType };
         });
-        const matchedTypeIndex = matchedResults.findIndex(result => result.valid);
+        const matchedTypeIndex = matchedResults.findIndex(({ valid }) => valid);
         const genericTypeIndex = expectedTypes.findIndex(expectedType => ast.generics.includes(expectedType));
 
         // Resolved the above indices to actual types, either concrete or generic. Also find the `originalType`
