@@ -1,7 +1,39 @@
 import * as u from './utils.js';
 import { validateScalar } from '../scalar/index.js';
 
-export function createValidator(ast, declaration) {
+export const contexts = { VALUE: Symbol('typified/value'), TYPE: Symbol('typified/type') };
+
+export function createValidator(context, ast, declaration) {
+    switch (context) {
+        case contexts.VALUE:
+            return createValueValidator(ast, declaration);
+        // case contexts.TYPE:
+        // return createTypeValidator(ast, declaration)
+    }
+}
+
+export function produceValidationReport(validatorFn, types, values, generics = {}) {
+    const result = types.reduce(
+        (accum, type, index) => {
+            const value = values[index];
+            const report = validatorFn(type, value, accum.generics);
+            return { reports: [...accum.reports, report], generics: { ...accum.generics, ...report.generics } };
+        },
+        { reports: [], generics }
+    );
+
+    const firstInvalidReport = result.reports.find(report => !report.valid);
+    const error = firstInvalidReport ? firstInvalidReport.error : null;
+
+    return {
+        valid: result.reports.every(report => report.valid),
+        reports: result.reports,
+        generics: result.generics,
+        error
+    };
+}
+
+function createValueValidator(ast, declaration) {
     return function validatorFn(types, value, generics = {}) {
         // Map each of the expected types by inspecting the generics and the defined aliases, otherwise the
         // type as it's passed is taken. We also determine the primitive type of the value, which may or may
@@ -48,26 +80,5 @@ export function createValidator(ast, declaration) {
                       scalarResults.message
                   )
         };
-    };
-}
-
-export function produceValidationReport(validatorFn, types, values, generics = {}) {
-    const result = types.reduce(
-        (accum, type, index) => {
-            const value = values[index];
-            const report = validatorFn(type, value, accum.generics);
-            return { reports: [...accum.reports, report], generics: { ...accum.generics, ...report.generics } };
-        },
-        { reports: [], generics }
-    );
-
-    const firstInvalidReport = result.reports.find(report => !report.valid);
-    const error = firstInvalidReport ? firstInvalidReport.error : null;
-
-    return {
-        valid: result.reports.every(report => report.valid),
-        reports: result.reports,
-        generics: result.generics,
-        error
     };
 }

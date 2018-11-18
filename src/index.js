@@ -1,5 +1,5 @@
 import * as parser from './parser/index.js';
-import { createValidator, produceValidationReport } from './validator/index.js';
+import { createValidator, produceValidationReport, contexts } from './validator/index.js';
 import * as u from './utils.js';
 
 export { addScalarValidator } from './scalar/index.js';
@@ -16,7 +16,7 @@ export default function defineType(types, ...expressions) {
                 // Parse the declaration into its own AST, create the validator context and render the first
                 // error encountered if the type declaration is invalid for the values passed.
                 const ast = parser.splitTypeDeclaration(declaration);
-                const validatorFn = createValidator(ast, declaration, parameters);
+                const validatorFn = createValidator(contexts.VALUE, ast, declaration, parameters);
                 const report = produceValidationReport(validatorFn, ast.types, [...input, output]);
                 !report.valid &&
                     (error => {

@@ -1,12 +1,12 @@
 import test from 'ava';
 import * as parser from '../../parser/index.js';
 // import defineType from '../../index.js';
-import { createValidator } from '../index.js';
+import { createValidator, contexts } from '../index.js';
 
 test('It should be able to validate declarations with concrete types;', t => {
     const declaration = 'String|Number';
     const ast = parser.splitTypeDeclaration(declaration);
-    const validate = createValidator(ast, declaration);
+    const validate = createValidator(contexts.VALUE, ast, declaration);
     const expectedTypes = ast.types[0];
     t.deepEqual(validate(expectedTypes, 'Adam'), {
         valid: true,
@@ -31,7 +31,7 @@ test('It should be able to validate declarations with concrete types;', t => {
 test('It should be able to validate declarations with alias types;', t => {
     const declaration = 'String s, Number n => s|n';
     const ast = parser.splitTypeDeclaration(declaration);
-    const validate = createValidator(ast, declaration);
+    const validate = createValidator(contexts.VALUE, ast, declaration);
     const expectedTypes = ast.types[0];
     t.deepEqual(validate(expectedTypes, 'Adam'), {
         valid: true,
@@ -56,7 +56,7 @@ test('It should be able to validate declarations with alias types;', t => {
 test('It should be able to validate declarations with generic types;', t => {
     const declaration = 'forall a. a';
     const ast = parser.splitTypeDeclaration(declaration);
-    const validate = createValidator(ast, declaration);
+    const validate = createValidator(contexts.VALUE, ast, declaration);
     const expectedTypes = ast.types[0];
     t.deepEqual(validate(expectedTypes, 'Adam'), {
         valid: true,
@@ -81,7 +81,7 @@ test('It should be able to validate declarations with generic types;', t => {
 test('It should be able to validate declarations with array types;', t => {
     const declaration = 'String s => Array(s)';
     const ast = parser.splitTypeDeclaration(declaration);
-    const validate = createValidator(ast, declaration);
+    const validate = createValidator(contexts.VALUE, ast, declaration);
     const expectedTypes = ast.types[0];
     t.deepEqual(validate(expectedTypes, ['Adam']), {
         valid: true,
@@ -106,7 +106,7 @@ test('It should be able to validate declarations with array types;', t => {
 test('It should be able to validate declarations with object types;', t => {
     const declaration = 'String s => Object(name: s, age: Number)';
     const ast = parser.splitTypeDeclaration(declaration);
-    const validate = createValidator(ast, declaration);
+    const validate = createValidator(contexts.VALUE, ast, declaration);
     const expectedTypes = ast.types[0];
     t.deepEqual(validate(expectedTypes, { name: 'Adam', age: 33 }), {
         valid: true,
@@ -137,7 +137,7 @@ test('It should be able to validate declarations with object types;', t => {
 // test('It should be able to validate declarations with primitive function types;', t => {
 //     const declaration = '(String -> Number -> String)';
 //     const ast = parser.splitTypeDeclaration(declaration);
-//     const validate = createValidator(ast, declaration);
+//     const validate = createValidator(contexts.VALUE, ast, declaration);
 //     const expectedTypes = ast.types[0];
 //     t.deepEqual(
 //         validate(
@@ -169,7 +169,7 @@ test('It should be able to validate declarations with object types;', t => {
 // test('It should be able to validate declarations with scalar function types;', t => {
 //     const declaration = '(Array(String) -> String) -> String)';
 //     const ast = parser.splitTypeDeclaration(declaration);
-//     const validate = createValidator(ast, declaration);
+//     const validate = createValidator(contexts.VALUE, ast, declaration);
 //     const expectedTypes = ast.types[0];
 //     console.log(validate(
 //         expectedTypes,
