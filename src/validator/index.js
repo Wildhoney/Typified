@@ -1,5 +1,5 @@
 import * as u from './utils.js';
-import { validateScalar } from '../scalar/index.js';
+import { validateValue } from '../scalar/index.js';
 
 export const contexts = { VALUE: Symbol('typified/value'), TYPE: Symbol('typified/type') };
 
@@ -7,8 +7,8 @@ export function createValidator(context, ast, declaration) {
     switch (context) {
         case contexts.VALUE:
             return createValueValidator(ast, declaration);
-        // case contexts.TYPE:
-        // return createTypeValidator(ast, declaration)
+        case contexts.TYPE:
+            return createTypeValidator(ast, declaration);
     }
 }
 
@@ -45,7 +45,7 @@ function createValueValidator(ast, declaration) {
         // a scalar is found by delegating to the correct scalar validator, if it exists.
         const matchedResults = expectedTypes.map(expectedType => {
             return u.isScalar(expectedType)
-                ? validateScalar(validatorFn, expectedType, value, generics)
+                ? validateValue(validatorFn, expectedType, value, generics)
                 : { valid: expectedType === actualType };
         });
         const matchedTypeIndex = matchedResults.findIndex(({ valid }) => valid);
@@ -53,8 +53,8 @@ function createValueValidator(ast, declaration) {
 
         // Resolved the above indices to actual types, either concrete or generic. Also find the `originalType`
         // which is the type that matched from the types past to the function initially.
-        const genericType = expectedTypes[genericTypeIndex];
         const matchedType = expectedTypes[matchedTypeIndex];
+        const genericType = expectedTypes[genericTypeIndex];
         const originalType = types[genericTypeIndex] || types[matchedTypeIndex];
 
         // If we have a matched type then take the generics and the message from that result.
@@ -79,6 +79,25 @@ function createValueValidator(ast, declaration) {
                       declaration,
                       scalarResults.message
                   )
+        };
+    };
+}
+
+function createTypeValidator([sourceAst, targetAst], declaration) {
+    return function validatorFn(sourceTypes, targetTypes, generics = {}) {
+        const matchedTypeIndex = sourceTypes.findIndex(type => {
+            const sourceType = generics[type] || sourceAst.aliases[type] || type;
+            return targetTypes.includes(sourceType);
+        });
+        const genericTypeIndex = targetTypes.findIndex(type => targetAst.generics.includes(type));
+
+        const matchedType = sourceTypes[matchedTypeIndex];
+        const genericType = sourceTypes[genericTypeIndex];
+
+        const isTypeValid = Boolean(matchedType || genericType);
+
+        return {
+            valid: isTypeValid
         };
     };
 }

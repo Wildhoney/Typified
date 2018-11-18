@@ -14,7 +14,7 @@ export function addScalarValidator(type, fn) {
     handlers.set(type, fn);
 }
 
-export function validateScalar(validatorFn, declaration, value, generics) {
+export function validateValue(validatorFn, declaration, value, generics) {
     const ast = u.parseScalar(declaration);
     const f = handlers.get(ast.type ? ast.type : 'Function');
     return f.validate(validatorFn, ast, value, generics);
