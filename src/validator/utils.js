@@ -2,7 +2,9 @@ import { parseScalar } from '../scalar/utils.js';
 import { isFunction, typeDeclaration } from '../utils.js';
 
 export function formatTypeMismatchMessage(expectedTypes, actualType, declaration, message) {
-    const value = `Expected ${expectedTypes.join(' or ')} in \`${declaration}\` declaration but received ${actualType}`;
+    const value = `Expected ${expectedTypes.join(' or ')} in \`${declaration}\` declaration but received ${[]
+        .concat(actualType)
+        .join(' or ')}`;
     return message ? `${value} (${message}).` : `${value}.`;
 }
 

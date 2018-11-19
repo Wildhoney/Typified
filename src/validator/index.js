@@ -1,5 +1,5 @@
 import * as u from './utils.js';
-import { validateValue } from '../scalar/index.js';
+import { validateValue, validateType } from '../scalar/index.js';
 
 export const contexts = { VALUE: Symbol('typified/value'), TYPE: Symbol('typified/type') };
 
@@ -49,7 +49,9 @@ function createValueValidator(ast, declaration) {
                 : { valid: expectedType === actualType };
         });
         const matchedTypeIndex = matchedResults.findIndex(({ valid }) => valid);
-        const genericTypeIndex = expectedTypes.findIndex(expectedType => ast.generics.includes(expectedType));
+        const genericTypeIndex = expectedTypes.findIndex(
+            expectedType => ast.generics.includes(expectedType) && !(expectedType in generics)
+        );
 
         // Resolved the above indices to actual types, either concrete or generic. Also find the `originalType`
         // which is the type that matched from the types past to the function initially.
@@ -84,20 +86,36 @@ function createValueValidator(ast, declaration) {
 }
 
 function createTypeValidator([sourceAst, targetAst], declaration) {
-    return function validatorFn(sourceTypes, targetTypes, generics = {}) {
-        const matchedTypeIndex = sourceTypes.findIndex(type => {
+    return function validatorFn(sourceType, targetTypes, generics = {}) {
+        const sourceTypes = [].concat(sourceType);
+        const matchedResults = sourceTypes.map(type => {
             const sourceType = generics[type] || sourceAst.aliases[type] || type;
-            return targetTypes.includes(sourceType);
+            return u.isScalar(sourceType)
+                ? validateType(validatorFn, targetTypes, sourceType, generics)
+                : { valid: targetTypes.includes(sourceType) };
         });
-        const genericTypeIndex = targetTypes.findIndex(type => targetAst.generics.includes(type));
+        const matchedTypeIndex = matchedResults.findIndex(({ valid }) => valid);
+        const genericTypeIndex = targetTypes.findIndex(
+            type => targetAst.generics.includes(type) && !(type in generics)
+        );
 
         const matchedType = sourceTypes[matchedTypeIndex];
-        const genericType = sourceTypes[genericTypeIndex];
+        const genericType = targetTypes[genericTypeIndex];
 
         const isTypeValid = Boolean(matchedType || genericType);
 
+        const updatedGenerics = {
+            ...generics,
+            ...(isTypeValid &&
+                genericType && { ...matchedResults.generics, [genericType]: sourceTypes[genericTypeIndex] })
+        };
+
         return {
-            valid: isTypeValid
+            valid: isTypeValid,
+            generics: updatedGenerics,
+            error: isTypeValid
+                ? null
+                : u.formatTypeMismatchMessage(sourceTypes, targetTypes, declaration, matchedResults.message)
         };
     };
 }

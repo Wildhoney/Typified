@@ -139,7 +139,7 @@ test('It should be able to validate declarations with concrete function types;',
     const sourceAst = parser.splitTypeDeclaration(declaration);
     const targetAst = parser.splitTypeDeclaration('String');
     const validate = createValidator(contexts.TYPE, [sourceAst, targetAst], declaration);
-    t.deepEqual(validate(sourceAst.types[0], targetAst.types[0]), { valid: true });
+    t.deepEqual(validate(sourceAst.types[0], targetAst.types[0]), { valid: true, generics: {}, error: null });
 });
 
 test('It should be able to validate declarations with alias function types;', t => {
@@ -147,7 +147,7 @@ test('It should be able to validate declarations with alias function types;', t 
     const sourceAst = parser.splitTypeDeclaration(declaration);
     const targetAst = parser.splitTypeDeclaration('String');
     const validate = createValidator(contexts.TYPE, [sourceAst, targetAst], declaration);
-    t.deepEqual(validate(sourceAst.types[0], targetAst.types[0]), { valid: true });
+    t.deepEqual(validate(sourceAst.types[0], targetAst.types[0]), { valid: true, generics: {}, error: null });
 });
 
 test('It should be able to validate declarations with alias function types;', t => {
@@ -155,7 +155,7 @@ test('It should be able to validate declarations with alias function types;', t 
     const sourceAst = parser.splitTypeDeclaration(declaration);
     const targetAst = parser.splitTypeDeclaration('String s => s');
     const validate = createValidator(contexts.TYPE, [sourceAst, targetAst], declaration);
-    t.deepEqual(validate(sourceAst.types[0], targetAst.types[0]), { valid: true });
+    t.deepEqual(validate(sourceAst.types[0], targetAst.types[0]), { valid: true, generics: {}, error: null });
 });
 
 test('It should be able to validate declarations with generic function types;', t => {
@@ -163,6 +163,39 @@ test('It should be able to validate declarations with generic function types;', 
     const sourceAst = parser.splitTypeDeclaration(declaration);
     const targetAst = parser.splitTypeDeclaration('String');
     const validate = createValidator(contexts.TYPE, [sourceAst, targetAst], declaration);
-    t.deepEqual(validate(sourceAst.types[0], targetAst.types[0], { a: 'String' }), { valid: true });
-    t.deepEqual(validate(sourceAst.types[0], targetAst.types[0], { a: 'Number' }), { valid: false });
+    t.deepEqual(validate(sourceAst.types[0], targetAst.types[0], { a: 'String' }), {
+        valid: true,
+        generics: { a: 'String' },
+        error: null
+    });
+    t.deepEqual(validate(sourceAst.types[0], targetAst.types[0], { a: 'Number' }), {
+        valid: false,
+        generics: { a: 'Number' },
+        error: `Expected a in \`${declaration}\` declaration but received String.`
+    });
+});
+
+test('It should be able to validate declarations with reversed generic function types;', t => {
+    const declaration = 'Date';
+    const sourceAst = parser.splitTypeDeclaration(declaration);
+    const targetAst = parser.splitTypeDeclaration('forall a. a');
+    const validate = createValidator(contexts.TYPE, [sourceAst, targetAst], declaration);
+    t.deepEqual(validate(sourceAst.types[0], targetAst.types[0]), {
+        valid: true,
+        generics: { a: 'Date' },
+        error: null
+    });
+    t.deepEqual(validate(sourceAst.types[0], targetAst.types[0], { a: 'Boolean' }), {
+        valid: false,
+        generics: { a: 'Boolean' },
+        error: `Expected Date in \`${declaration}\` declaration but received a.`
+    });
+});
+
+test('It should be able to validate declarations with array function types;', t => {
+    const declaration = 'String s => Array(s)';
+    const sourceAst = parser.splitTypeDeclaration(declaration);
+    const targetAst = parser.splitTypeDeclaration('Array(String)');
+    const validate = createValidator(contexts.TYPE, [sourceAst, targetAst], declaration);
+    t.deepEqual(validate(sourceAst.types[0], targetAst.types[0]), { valid: true, generics: {}, error: null });
 });

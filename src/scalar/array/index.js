@@ -1,6 +1,6 @@
 import { splitTopLevel } from '../../parser/utils.js';
 
-export function validateArray(validatorFn, ast, collection, generics) {
+export function isValueValid(validatorFn, ast, collection, generics) {
     const initial = { valid: true, generics };
 
     return Array.isArray(collection)
@@ -13,4 +13,8 @@ export function validateArray(validatorFn, ast, collection, generics) {
               };
           }, initial)
         : { valid: false };
+}
+
+export function isTypeValid(validatorFn, targetTypes, sourceType) {
+    return validatorFn(sourceType, targetTypes);
 }

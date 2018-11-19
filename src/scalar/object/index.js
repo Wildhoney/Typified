@@ -1,6 +1,6 @@
 import { splitTopLevel } from '../../parser/utils.js';
 
-export function validateObject(validatorFn, ast, model, generics) {
+export function isValueValid(validatorFn, ast, model, generics) {
     const initial = { valid: true, generics };
     const typeMap = getTypeMap(ast);
 
