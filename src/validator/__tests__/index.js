@@ -193,9 +193,18 @@ test('It should be able to validate declarations with reversed generic function 
 });
 
 test('It should be able to validate declarations with array function types;', t => {
-    const declaration = 'String s => Array(s)';
+    const declaration = 'String s => Array(s) -> Array(Number)';
     const sourceAst = parser.splitTypeDeclaration(declaration);
-    const targetAst = parser.splitTypeDeclaration('Array(String)');
+    const targetAst = parser.splitTypeDeclaration('Array(String) -> Array(Date)');
+    const validate = createValidator(contexts.TYPE, [sourceAst, targetAst], declaration);
+    t.deepEqual(validate(sourceAst.types[0], targetAst.types[0]), { valid: true, generics: {}, error: null });
+    // t.deepEqual(validate(sourceAst.types[1], targetAst.types[1]), { valid: false, generics: {}, error: null });
+});
+
+test('It should be able to validate declarations with object function types;', t => {
+    const declaration = 'String s => Object(name: s, age: Number)';
+    const sourceAst = parser.splitTypeDeclaration(declaration);
+    const targetAst = parser.splitTypeDeclaration('Object(name: String, age: Number)');
     const validate = createValidator(contexts.TYPE, [sourceAst, targetAst], declaration);
     t.deepEqual(validate(sourceAst.types[0], targetAst.types[0]), { valid: true, generics: {}, error: null });
 });

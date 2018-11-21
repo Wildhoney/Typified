@@ -5,7 +5,7 @@ import * as u from './utils.js';
 const handlers = new Map(
     Object.entries({
         Array: { value: array.isValueValid, type: array.isTypeValid },
-        Object: { value: object.isValueValid }
+        Object: { value: object.isValueValid,type:object.isTypeValid }
         // Function: handleFunction
     })
 );

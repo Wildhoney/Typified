@@ -86,8 +86,7 @@ function createValueValidator(ast, declaration) {
 }
 
 function createTypeValidator([sourceAst, targetAst], declaration) {
-    return function validatorFn(sourceType, targetTypes, generics = {}) {
-        const sourceTypes = [].concat(sourceType);
+    return function validatorFn(sourceTypes, targetTypes, generics = {}) {
         const matchedResults = sourceTypes.map(type => {
             const sourceType = generics[type] || sourceAst.aliases[type] || type;
             return u.isScalar(sourceType)

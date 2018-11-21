@@ -16,5 +16,5 @@ export function isValueValid(validatorFn, ast, collection, generics) {
 }
 
 export function isTypeValid(validatorFn, targetTypes, sourceType) {
-    return validatorFn(sourceType, targetTypes);
+    return validatorFn(splitTopLevel(sourceType, '|'), targetTypes.flatMap(type => splitTopLevel(type, '|')));
 }
