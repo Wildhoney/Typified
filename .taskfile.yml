@@ -8,5 +8,8 @@
 
 - name: test
   tasks:
-    - ava
+    - nyc ava
     - - eslint "src/**/**.js"
+
+- name: test/coverage
+  task: nyc report --reporter=text-lcov | coveralls

@@ -6,7 +6,8 @@
     "scripts": {
         "test": "taskfile test",
         "format": "taskfile format",
-        "start": "taskfile start"
+        "start": "taskfile start",
+        "coverage": "taskfile test/coverage"
     },
     "repository": {
         "type": "git",
@@ -51,5 +52,9 @@
             "core-js",
             "browser-env"
         ]
+    },
+    "dependencies": {
+        "coveralls": "^3.0.2",
+        "nyc": "^13.1.0"
     }
 }
