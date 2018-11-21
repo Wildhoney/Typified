@@ -73,37 +73,3 @@ export function produceValidationReport(validatorFn, types, values, generics = {
         error
     };
 }
-
-// function createTypeValidator([sourceAst, targetAst], declaration) {
-//     return function validatorFn(sourceTypes, targetTypes, generics = {}) {
-//         const matchedResults = sourceTypes.map(type => {
-//             const sourceType = generics[type] || sourceAst.aliases[type] || type;
-//             return u.isScalar(sourceType)
-//                 ? validateType(validatorFn, targetTypes, sourceType, generics)
-//                 : { valid: targetTypes.includes(sourceType) };
-//         });
-//         const matchedTypeIndex = matchedResults.findIndex(({ valid }) => valid);
-//         const genericTypeIndex = targetTypes.findIndex(
-//             type => targetAst.generics.includes(type) && !(type in generics)
-//         );
-
-//         const matchedType = sourceTypes[matchedTypeIndex];
-//         const genericType = targetTypes[genericTypeIndex];
-
-//         const isTypeValid = Boolean(matchedType || genericType);
-
-//         const updatedGenerics = {
-//             ...generics,
-//             ...(isTypeValid &&
-//                 genericType && { ...matchedResults.generics, [genericType]: sourceTypes[genericTypeIndex] })
-//         };
-
-//         return {
-//             valid: isTypeValid,
-//             generics: updatedGenerics,
-//             error: isTypeValid
-//                 ? null
-//                 : u.formatTypeMismatchMessage(sourceTypes, targetTypes, declaration, matchedResults.message)
-//         };
-//     };
-// }
