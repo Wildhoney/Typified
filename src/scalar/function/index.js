@@ -1,12 +1,15 @@
-import { splitTypeDeclaration } from '../../parser/index.js';
-import { typeDeclaration } from '../../utils.js';
+export default function validateFunction(validatorFn, ast, declaration, generics) {
+    const initial = { valid: true, generics };
+    const results = ast.types.reduce((accum, types, index) => {
+        const result = declaration[index]
+            .map(declarationType => validatorFn(types, declarationType, generics))
+            .find(({ valid }) => valid) || { valid: false, generics };
 
-export default function validateFunction(validatorFn, ast, fn, generics) {
-    const sourceAst = splitTypeDeclaration(ast.declaration);
-    const destinationAst = splitTypeDeclaration(fn[typeDeclaration]);
+        return {
+            valid: accum.valid && result.valid,
+            generics: result.generics
+        };
+    }, initial);
 
-    void sourceAst;
-    void destinationAst;
-
-    return { valid: true };
+    return { valid: results.valid };
 }

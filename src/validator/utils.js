@@ -1,6 +1,12 @@
 import { parseScalar } from '../scalar/utils.js';
 import { isFunction, typeDeclaration } from '../utils.js';
 
+export class Type {
+    constructor(type) {
+        this.type = type;
+    }
+}
+
 export function formatTypeMismatchMessage(expectedTypes, actualType, declaration, message) {
     const value = `Expected ${expectedTypes.join(' or ')} in \`${declaration}\` declaration but received ${[]
         .concat(actualType)
@@ -17,6 +23,9 @@ export function isScalar(type) {
 }
 
 export function getPrimitiveType(value) {
+    if (value instanceof Type) {
+        return value.type;
+    }
     const nil = value == null;
     return nil ? 'void' : value.constructor.name;
 }
