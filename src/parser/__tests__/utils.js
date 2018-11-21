@@ -2,15 +2,19 @@ import test from 'ava';
 import * as parserUtils from '../utils.js';
 
 test('It should be able to determine if a type is a scalar type;', t => {
-    t.deepEqual(parserUtils.getScalarAst('Array(String)'), {
+    t.deepEqual(parserUtils.parseScalar('Array(String)'), {
         type: 'Array',
         description: 'String'
     });
-    t.deepEqual(parserUtils.getScalarAst('Object(name: String)'), {
+    t.deepEqual(parserUtils.parseScalar('Object(name: String)'), {
         type: 'Object',
         description: 'name: String'
     });
-    t.is(parserUtils.getScalarAst('String'), null);
+    t.deepEqual(parserUtils.parseScalar('(String -> Number -> Boolean)'), {
+        description: 'String -> Number -> Boolean',
+        type: ''
+    });
+    t.is(parserUtils.parseScalar('String'), null);
 });
 
 test('It should be able to split at the top level only;', t => {
