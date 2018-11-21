@@ -68,3 +68,28 @@ test('It should be able to validate declarations with alias function types;', t 
         error: `Expected (d -> n -> String) in \`${declaration}\` declaration but received (String s => s -> Number -> s).`
     });
 });
+
+test('It should be able to validate declarations with standard generic function types;', t => {
+    const sayHello = type`String -> Number -> String`((name, age) => `Hello ${name}! You are ${age}.`);
+    const declaration = 'forall a b c. (a -> Number -> a) -> (a -> b -> c) -> (a -> a -> a)';
+    const ast = parser.splitTypeDeclaration(declaration);
+    const validate = createValidator(ast, declaration);
+    t.deepEqual(validate(ast.types[0], sayHello), {
+        valid: true,
+        type: '(a -> Number -> a)',
+        generics: {},
+        error: null
+    });
+    t.deepEqual(validate(ast.types[1], sayHello), {
+        valid: true,
+        type: '(a -> b -> c)',
+        generics: {},
+        error: null
+    });
+    t.deepEqual(validate(ast.types[2], sayHello), {
+        valid: false,
+        type: 'Function',
+        generics: {},
+        error: `Expected (a -> a -> a) in \`${declaration}\` declaration but received (String -> Number -> String).`
+    });
+});
