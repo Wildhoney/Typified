@@ -1,39 +1,7 @@
 import * as u from './utils.js';
-import { validateValue, validateType } from '../scalar/index.js';
+import { validateScalar } from '../scalar/index.js';
 
-export const contexts = { VALUE: Symbol('typified/value'), TYPE: Symbol('typified/type') };
-
-export function createValidator(context, ast, declaration) {
-    switch (context) {
-        case contexts.VALUE:
-            return createValueValidator(ast, declaration);
-        case contexts.TYPE:
-            return createTypeValidator(ast, declaration);
-    }
-}
-
-export function produceValidationReport(validatorFn, types, values, generics = {}) {
-    const result = types.reduce(
-        (accum, type, index) => {
-            const value = values[index];
-            const report = validatorFn(type, value, accum.generics);
-            return { reports: [...accum.reports, report], generics: { ...accum.generics, ...report.generics } };
-        },
-        { reports: [], generics }
-    );
-
-    const firstInvalidReport = result.reports.find(report => !report.valid);
-    const error = firstInvalidReport ? firstInvalidReport.error : null;
-
-    return {
-        valid: result.reports.every(report => report.valid),
-        reports: result.reports,
-        generics: result.generics,
-        error
-    };
-}
-
-function createValueValidator(ast, declaration) {
+export function createValidator(ast, declaration) {
     return function validatorFn(types, value, generics = {}) {
         // Map each of the expected types by inspecting the generics and the defined aliases, otherwise the
         // type as it's passed is taken. We also determine the primitive type of the value, which may or may
@@ -45,7 +13,7 @@ function createValueValidator(ast, declaration) {
         // a scalar is found by delegating to the correct scalar validator, if it exists.
         const matchedResults = expectedTypes.map(expectedType => {
             return u.isScalar(expectedType)
-                ? validateValue(validatorFn, expectedType, value, generics)
+                ? validateScalar(validatorFn, expectedType, value, generics)
                 : { valid: expectedType === actualType };
         });
         const matchedTypeIndex = matchedResults.findIndex(({ valid }) => valid);
@@ -85,36 +53,57 @@ function createValueValidator(ast, declaration) {
     };
 }
 
-function createTypeValidator([sourceAst, targetAst], declaration) {
-    return function validatorFn(sourceTypes, targetTypes, generics = {}) {
-        const matchedResults = sourceTypes.map(type => {
-            const sourceType = generics[type] || sourceAst.aliases[type] || type;
-            return u.isScalar(sourceType)
-                ? validateType(validatorFn, targetTypes, sourceType, generics)
-                : { valid: targetTypes.includes(sourceType) };
-        });
-        const matchedTypeIndex = matchedResults.findIndex(({ valid }) => valid);
-        const genericTypeIndex = targetTypes.findIndex(
-            type => targetAst.generics.includes(type) && !(type in generics)
-        );
+export function produceValidationReport(validatorFn, types, values, generics = {}) {
+    const result = types.reduce(
+        (accum, type, index) => {
+            const value = values[index];
+            const report = validatorFn(type, value, accum.generics);
+            return { reports: [...accum.reports, report], generics: { ...accum.generics, ...report.generics } };
+        },
+        { reports: [], generics }
+    );
 
-        const matchedType = sourceTypes[matchedTypeIndex];
-        const genericType = targetTypes[genericTypeIndex];
+    const firstInvalidReport = result.reports.find(report => !report.valid);
+    const error = firstInvalidReport ? firstInvalidReport.error : null;
 
-        const isTypeValid = Boolean(matchedType || genericType);
-
-        const updatedGenerics = {
-            ...generics,
-            ...(isTypeValid &&
-                genericType && { ...matchedResults.generics, [genericType]: sourceTypes[genericTypeIndex] })
-        };
-
-        return {
-            valid: isTypeValid,
-            generics: updatedGenerics,
-            error: isTypeValid
-                ? null
-                : u.formatTypeMismatchMessage(sourceTypes, targetTypes, declaration, matchedResults.message)
-        };
+    return {
+        valid: result.reports.every(report => report.valid),
+        reports: result.reports,
+        generics: result.generics,
+        error
     };
 }
+
+// function createTypeValidator([sourceAst, targetAst], declaration) {
+//     return function validatorFn(sourceTypes, targetTypes, generics = {}) {
+//         const matchedResults = sourceTypes.map(type => {
+//             const sourceType = generics[type] || sourceAst.aliases[type] || type;
+//             return u.isScalar(sourceType)
+//                 ? validateType(validatorFn, targetTypes, sourceType, generics)
+//                 : { valid: targetTypes.includes(sourceType) };
+//         });
+//         const matchedTypeIndex = matchedResults.findIndex(({ valid }) => valid);
+//         const genericTypeIndex = targetTypes.findIndex(
+//             type => targetAst.generics.includes(type) && !(type in generics)
+//         );
+
+//         const matchedType = sourceTypes[matchedTypeIndex];
+//         const genericType = targetTypes[genericTypeIndex];
+
+//         const isTypeValid = Boolean(matchedType || genericType);
+
+//         const updatedGenerics = {
+//             ...generics,
+//             ...(isTypeValid &&
+//                 genericType && { ...matchedResults.generics, [genericType]: sourceTypes[genericTypeIndex] })
+//         };
+
+//         return {
+//             valid: isTypeValid,
+//             generics: updatedGenerics,
+//             error: isTypeValid
+//                 ? null
+//                 : u.formatTypeMismatchMessage(sourceTypes, targetTypes, declaration, matchedResults.message)
+//         };
+//     };
+// }
