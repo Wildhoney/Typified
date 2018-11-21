@@ -22,7 +22,7 @@ export function isScalar(type) {
     return Boolean(parseScalar(type));
 }
 
-export function getPrimitiveType(value) {
+export function getType(value) {
     if (value instanceof Type) {
         return value.type;
     }
@@ -44,7 +44,7 @@ export function determineActualType(value) {
     if (isObjectLike) {
         const model = value;
         const types = Object.entries(model).map(([key, value]) => `${key}: ${determineActualType(value)}`);
-        return `${getPrimitiveType(value)}(${types.join(', ')})`;
+        return `${getType(value)}(${types.join(', ')})`;
     }
 
     if (isFunctionLike) {
@@ -52,5 +52,5 @@ export function determineActualType(value) {
         return `(${fn[typeDeclaration]})`;
     }
 
-    return getPrimitiveType(value);
+    return getType(value);
 }

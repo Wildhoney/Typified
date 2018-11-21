@@ -6,7 +6,7 @@ export function createValidator(ast, declaration) {
         // Map each of the expected types by inspecting the generics and the defined aliases, otherwise the
         // type as it's passed is taken. We also determine the primitive type of the value, which may or may
         // not be a scalar type at this point.
-        const actualType = u.getPrimitiveType(value);
+        const actualType = u.getType(value);
         const expectedTypes = types.map(type => generics[type] || ast.aliases[type] || type);
 
         // Find the indices that match either the generic type or the concrete type, recursing when
