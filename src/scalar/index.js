@@ -28,11 +28,9 @@ export function validateScalar(validatorFn, declaration, value, generics) {
         if (!hasTypeDeclaration) {
             return { valid: true };
         }
-        const ast = splitTypeDeclaration(value[typeDeclaration]);
-        const typeValidatorFn = (types, type, generics) => {
-            return validatorFn(types, new Type(type), generics);
-        };
-        return fn(typeValidatorFn, ast, ast.types, {});
+        const targetAst = splitTypeDeclaration(value[typeDeclaration]);
+        const typeValidatorFn = (types, type, generics) => validatorFn(types, new Type(type), generics);
+        return fn(typeValidatorFn, ast, targetAst.types, {});
     }
 
     return fn(validatorFn, ast, value, generics);
