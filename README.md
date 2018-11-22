@@ -40,8 +40,7 @@ Typified also supports to the concept of [generics](https://en.wikipedia.org/wik
 
 ```javascript
 const sayHello =
-    ꓽ `String → String → String`
-    ((firstName, secondName) => {
+    ꓽ `String → String → String` ((firstName, secondName) => {
         return firstName === secondName
             ? `Hello ${firstName}!`
             : `Hello ${firstName} & ${secondName}!`;
@@ -54,8 +53,7 @@ You might be tempted to define the type as `String|Number → String|Number → 
 
 ```javascript
 const sayHello =
-    ꓽ `∀ a. a → a → String`
-    ((firstName, secondName) => {
+    ꓽ `∀ a. a → a → String` ((firstName, secondName) => {
         return firstName === secondName
             ? `Hello ${firstName}!`
             : `Hello ${firstName} & ${secondName}!`;
