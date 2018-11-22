@@ -22,8 +22,10 @@ export function isScalar(type) {
     return Boolean(parseScalar(type));
 }
 
+export const isType = type => type instanceof Type;
+
 export function getType(value) {
-    if (value instanceof Type) {
+    if (isType(value)) {
         return value.is;
     }
     const nil = value == null;
