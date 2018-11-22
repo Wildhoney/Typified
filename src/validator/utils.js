@@ -3,7 +3,7 @@ import { isFunction, typeDeclaration } from '../utils.js';
 
 export class Type {
     constructor(type) {
-        this.type = type;
+        this.is = type;
     }
 }
 
@@ -24,7 +24,7 @@ export function isScalar(type) {
 
 export function getType(value) {
     if (value instanceof Type) {
-        return value.type;
+        return value.is;
     }
     const nil = value == null;
     return nil ? 'void' : value.constructor.name;

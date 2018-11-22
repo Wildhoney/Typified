@@ -55,6 +55,7 @@
     },
     "dependencies": {
         "coveralls": "^3.0.2",
-        "nyc": "^13.1.0"
+        "nyc": "^13.1.0",
+        "sinon": "^7.1.1"
     }
 }

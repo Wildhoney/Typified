@@ -31,4 +31,5 @@ test('It should be able to determine the types of values;', t => {
     t.is(validatorUtils.getType(new Uint16Array()), 'Uint16Array');
     t.is(validatorUtils.getType(undefined), 'void');
     t.is(validatorUtils.getType(null), 'void');
+    t.is(validatorUtils.getType(new validatorUtils.Type('Number')), 'Number');
 });
