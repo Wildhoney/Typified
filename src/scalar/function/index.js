@@ -2,16 +2,13 @@ import { splitTypeDeclaration } from '../../parser';
 import { Type } from '../../validator/utils';
 
 export default function validateFunction(validatorFn, ast, declaration, generics) {
-    if (!declaration) {
-        return { valid: true };
-    }
-
     const initial = { valid: true, generics };
     const { types } = splitTypeDeclaration(ast.declaration);
 
-    const results = types.reduce((accum, types, index) => {
-        const result = declaration[index]
-            .map(declarationType => validatorFn(types, new Type(declarationType), accum.generics))
+    const results = types.reduce((accum, type, index) => {
+        const types = declaration[index];
+        const result = type
+            .map(type => validatorFn(types, new Type(type), accum.generics))
             .find(({ valid }) => valid) || { valid: false, generics: accum.generics };
 
         return {
