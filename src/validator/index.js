@@ -18,7 +18,10 @@ export function createValidator(ast, declaration) {
         });
         const matchedTypeIndex = matchedResults.findIndex(({ valid }) => valid);
         const genericTypeIndex = expectedTypes.findIndex(
-            expectedType => ast.generics.includes(expectedType) && !(expectedType in generics)
+            expectedType =>
+                ast.generics.includes(expectedType) &&
+                !(expectedType in generics) &&
+                (u.isType(value) ? !Object.values(generics).includes(value.is) : true)
         );
 
         // Resolved the above indices to actual types, either concrete or generic. Also find the `originalType`

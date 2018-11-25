@@ -7,6 +7,8 @@ export class Type {
     }
 }
 
+export const isType = type => type instanceof Type;
+
 export function formatTypeMismatchMessage(expectedTypes, actualType, declaration, message) {
     const value = `Expected ${expectedTypes.join(' or ')} in \`${declaration}\` declaration but received ${[]
         .concat(actualType)
@@ -21,8 +23,6 @@ export function formatLengthMismatchMessage(expectedCount, actualCount, declarat
 export function isScalar(type) {
     return Boolean(parseScalar(type));
 }
-
-export const isType = type => type instanceof Type;
 
 export function getType(value) {
     if (isType(value)) {
