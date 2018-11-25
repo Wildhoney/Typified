@@ -1,6 +1,5 @@
 import { typeDeclaration } from '../utils.js';
 import { splitTypeDeclaration } from '../parser/index.js';
-import { Type } from '../validator/utils';
 import validateArray from './array/index.js';
 import validateObject from './object/index.js';
 import validateFunction from './function/index.js';
@@ -24,13 +23,8 @@ export function validateScalar(validatorFn, declaration, value, generics) {
     const fn = handlers.get(!isFunction ? ast.type : 'Function');
 
     if (isFunction) {
-        const hasTypeDeclaration = typeDeclaration in value;
-        if (!hasTypeDeclaration) {
-            return { valid: true };
-        }
-        const targetAst = splitTypeDeclaration(value[typeDeclaration]);
-        const typeValidatorFn = (types, type, generics) => validatorFn(types, new Type(type), generics);
-        return fn(typeValidatorFn, ast, targetAst.types, {});
+        const targetAst = typeDeclaration in value ? splitTypeDeclaration(value[typeDeclaration]) : { types: null };
+        return fn(validatorFn, ast, targetAst.types, {});
     }
 
     return fn(validatorFn, ast, value, generics);
