@@ -13,7 +13,7 @@ export function createValidator(ast, declaration) {
         // a scalar is found by delegating to the correct scalar validator, if it exists.
         const matchedResults = expectedTypes.map(expectedType => {
             return u.isScalar(expectedType)
-                ? validateScalar(validatorFn, expectedType, value, generics)
+                ? validateScalar(validatorFn, expectedType, value, generics, ast.aliases)
                 : { valid: expectedType === actualType };
         });
         const matchedTypeIndex = matchedResults.findIndex(({ valid }) => valid);
