@@ -1,5 +1,6 @@
 import test from 'ava';
 import * as validatorUtils from '../utils.js';
+import { splitTypeDeclaration } from '../../parser/index.js';
 
 test('It should be able to format the type mismatch and length messages;', t => {
     t.is(
@@ -31,5 +32,6 @@ test('It should be able to determine the types of values;', t => {
     t.is(validatorUtils.getType(new Uint16Array()), 'Uint16Array');
     t.is(validatorUtils.getType(undefined), 'void');
     t.is(validatorUtils.getType(null), 'void');
-    t.is(validatorUtils.getType(new validatorUtils.Type('Number')), 'Number');
+    t.is(validatorUtils.getType(new validatorUtils.Type('Number', splitTypeDeclaration('Number'))), 'Number');
+    t.is(validatorUtils.getType(new validatorUtils.Type('n', splitTypeDeclaration('Number n => n'))), 'Number');
 });

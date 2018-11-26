@@ -2,12 +2,28 @@ import { parseScalar } from '../scalar/utils.js';
 import { isFunction, typeDeclaration } from '../utils.js';
 
 export class Type {
-    constructor(type) {
+    constructor(type, ast) {
         this.is = type;
+        this.ast = ast;
+    }
+    set(type) {
+        this.is = type;
+        return this;
+    }
+    get() {
+        return this.ast.aliases[this.is] || this.is;
     }
 }
 
 export const isType = type => type instanceof Type;
+
+export function getType(value) {
+    if (isType(value)) {
+        return value.get();
+    }
+    const nil = value == null;
+    return nil ? 'void' : value.constructor.name;
+}
 
 export function formatTypeMismatchMessage(expectedTypes, actualType, declaration, message) {
     const value = `Expected ${expectedTypes.join(' or ')} in \`${declaration}\` declaration but received ${[]
@@ -22,14 +38,6 @@ export function formatLengthMismatchMessage(expectedCount, actualCount, declarat
 
 export function isScalar(type) {
     return Boolean(parseScalar(type));
-}
-
-export function getType(value) {
-    if (isType(value)) {
-        return value.is;
-    }
-    const nil = value == null;
-    return nil ? 'void' : value.constructor.name;
 }
 
 export function determineActualType(value) {
