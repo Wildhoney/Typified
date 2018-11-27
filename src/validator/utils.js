@@ -5,6 +5,7 @@ export class Type {
     constructor(type, ast) {
         this.is = type;
         this.ast = ast;
+        this.ref = Symbol(this.ast.types.join(' -> '));
     }
     set(type) {
         this.is = type;

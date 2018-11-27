@@ -10,13 +10,16 @@ export default function validateFunction(validatorFn, ast, value, generics) {
     const initial = { valid: true, generics };
     const localAst = splitTypeDeclaration(ast.declaration);
     const foreignAst = splitTypeDeclaration(value[typeDeclaration]);
+    const newType = new Type(null, foreignAst);
 
     const results = foreignAst.types.reduce((accum, types, index) => {
         const localTypes = localAst.types[index];
-        const foreignTypes = types.map(type => new Type(type, foreignAst));
+        const foreignTypes = types.map(type => newType.set(type));
         const result = foreignTypes
             .map(foreignType => validatorFn(localTypes, foreignType, accum.generics))
             .find(({ valid }) => valid) || { valid: false, generics: accum.generics };
+
+        // console.log(result);
 
         return {
             valid: accum.valid && result.valid,

@@ -100,34 +100,35 @@ test('It should be able to validate declarations with generic function types;', 
     });
 });
 
-// test.only('It should be able to validate declarations with reversed generic function types;', t => {
-//     const sayHello = type`forall a b. a -> b -> a`((name, age) => `Hello ${name}! You are ${age}.`);
-//     const declaration = 'forall s n. (s -> n -> s) -> (String -> Number -> String) -> (s -> s -> s) -> (s -> n -> n)';
-//     const ast = parser.splitTypeDeclaration(declaration);
-//     const validate = createValidator(ast, declaration);
-//     t.deepEqual(validate(ast.types[0], sayHello), {
-//         valid: true,
-//         type: '(s -> n -> s)',
-//         generics: {},
-//         error: null
-//     });
-//     t.deepEqual(validate(ast.types[1], sayHello), {
-//         valid: true,
-//         type: '(String -> Number -> String)',
-//         generics: {},
-//         error: null
-//     });
-//     t.deepEqual(validate(ast.types[2], sayHello), {
-//         valid: true,
-//         type: '(s -> s -> s)',
-//         generics: {},
-//         error: null
-//     });
-//     t.deepEqual(validate(ast.types[3], sayHello), {
-//         valid: false,
-//         type: 'Function',
-//         generics: {},
-//         error:
-//             'Expected (s -> n -> n) in `forall s n. (s -> n -> s) -> (String -> Number -> String) -> (s -> s -> s) -> (s -> n -> n)` declaration but received (forall a b. a -> b -> a).'
-//     });
-// });
+test('It should be able to validate declarations with reversed generic function types;', t => {
+    const sayHello = type`forall a b. a -> b -> a`((name, age) => `Hello ${name}! You are ${age}.`);
+    const declaration = 'forall s n. (s -> n -> s) -> (String -> Number -> String) -> (s -> s -> s) -> (s -> n -> n)';
+    const ast = parser.splitTypeDeclaration(declaration);
+    const validate = createValidator(ast, declaration);
+    t.deepEqual(validate(ast.types[0], sayHello), {
+        valid: true,
+        type: '(s -> n -> s)',
+        generics: {},
+        error: null
+    });
+    t.deepEqual(validate(ast.types[1], sayHello), {
+        valid: true,
+        type: '(String -> Number -> String)',
+        generics: {},
+        error: null
+    });
+    t.deepEqual(validate(ast.types[2], sayHello), {
+        valid: false,
+        type: 'Function',
+        generics: {},
+        error:
+            'Expected (s -> s -> s) in `forall s n. (s -> n -> s) -> (String -> Number -> String) -> (s -> s -> s) -> (s -> n -> n)` declaration but received (forall a b. a -> b -> a).'
+    });
+    t.deepEqual(validate(ast.types[3], sayHello), {
+        valid: false,
+        type: 'Function',
+        generics: {},
+        error:
+            'Expected (s -> n -> n) in `forall s n. (s -> n -> s) -> (String -> Number -> String) -> (s -> s -> s) -> (s -> n -> n)` declaration but received (forall a b. a -> b -> a).'
+    });
+});
