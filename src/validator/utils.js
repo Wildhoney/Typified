@@ -13,6 +13,9 @@ export class Type {
     get() {
         return this.ast.aliases[this.is] || this.is;
     }
+    isGeneric() {
+        return this.ast.generics.includes(this.is);
+    }
 }
 
 export const isType = type => type instanceof Type;
