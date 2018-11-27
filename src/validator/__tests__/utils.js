@@ -36,10 +36,10 @@ test('It should be able to determine the types of values;', t => {
     t.is(validatorUtils.getType(new validatorUtils.Type('n', splitTypeDeclaration('Number n => n'))), 'Number');
 });
 
-test("It should be able to handle `Type` values;", t => {
+test('It should be able to handle `Type` values;', t => {
     const type = new validatorUtils.Type('s', splitTypeDeclaration('forall a. String s, Date d => s -> d'));
     t.is(validatorUtils.getType(type), 'String');
     t.is(validatorUtils.getType(type.set('d')), 'Date');
     t.true(type.set('a').isGeneric());
     t.false(type.set('s').isGeneric());
-})
+});
