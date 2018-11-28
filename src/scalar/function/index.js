@@ -1,6 +1,6 @@
-import { splitTypeDeclaration } from '../../parser';
-import { Type } from '../../validator/utils';
-import { typeDeclaration } from '../../utils';
+import { splitTypeDeclaration } from '../../parser/index.js';
+import { Type } from '../../validator/utils.js';
+import { typeDeclaration } from '../../utils.js';
 
 export default function validateFunction(validatorFn, ast, value, generics) {
     if (!value[typeDeclaration]) {
@@ -18,8 +18,6 @@ export default function validateFunction(validatorFn, ast, value, generics) {
         const result = foreignTypes
             .map(foreignType => validatorFn(localTypes, foreignType, accum.generics))
             .find(({ valid }) => valid) || { valid: false, generics: accum.generics };
-
-        // console.log(result);
 
         return {
             valid: accum.valid && result.valid,
