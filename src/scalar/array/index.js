@@ -1,19 +1,20 @@
 import { parseScalar } from '../utils.js';
 import { splitTopLevel } from '../../parser/utils.js';
-import { Type, isType } from '../../validator/utils.js';
+import { isType } from '../../validator/utils.js';
 
 export default function validateArray(validatorFn, ast, collection, generics) {
-    const initial = { valid: true, generics };
-
     if (isType(collection)) {
-        const { declaration } = parseScalar(collection.is);
-        const types = splitTopLevel(declaration, '|');
-        return validatorFn(types, new Type(ast.declaration), generics);
+        const type = collection;
+        const { declaration } = parseScalar(type.is);
+        const types = splitTopLevel(ast.declaration, '|');
+        return validatorFn(types, type.set(declaration), generics);
     }
 
     if (!Array.isArray(collection)) {
         return { valid: false };
     }
+
+    const initial = { valid: true, generics };
 
     return collection.reduce((accum, value) => {
         const types = splitTopLevel(ast.declaration, '|');

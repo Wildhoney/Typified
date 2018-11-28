@@ -2,7 +2,7 @@ import { parseScalar } from '../scalar/utils.js';
 import { isFunction, typeDeclaration } from '../utils.js';
 
 export class Type {
-    constructor(type, ast, ref  = Symbol(ast.types.join(' → '))) {
+    constructor(type, ast, ref = Symbol(ast.types.join(' → '))) {
         this.is = type;
         this.ast = ast;
         this.ref = ref;
