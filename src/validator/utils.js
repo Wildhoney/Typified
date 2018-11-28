@@ -2,14 +2,13 @@ import { parseScalar } from '../scalar/utils.js';
 import { isFunction, typeDeclaration } from '../utils.js';
 
 export class Type {
-    constructor(type, ast) {
+    constructor(type, ast, ref  = Symbol(ast.types.join(' → '))) {
         this.is = type;
         this.ast = ast;
-        this.ref = Symbol(this.ast.types.join(' -> '));
+        this.ref = ref;
     }
     set(type) {
-        this.is = type;
-        return this;
+        return new Type(type, this.ast, this.ref);
     }
     get() {
         return this.ast.aliases[this.is] || this.is;
