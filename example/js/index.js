@@ -23,11 +23,13 @@ console.log(
     'color: deeppink'
 );
 console.log(
-    "%cAnd then call it with different types to test it: %cgetName(%c'Adam'%c) %cand %cgetName(33)",
+    "%cAnd then call it with different types to test it: %cgetName(%c'Adam'%c) %cand %cgetName(%c33%c)",
     'color: #656d78',
     'color: deeppink',
     'color: green',
     'color: deeppink',
     'color: #656d78',
+    'color: deeppink',
+    'color: green',
     'color: deeppink'
 );
