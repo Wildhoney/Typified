@@ -2,10 +2,32 @@ import ꓽ from '/vendor/index.js';
 
 const getHello =
     ꓽ `String → Number → String`
-    ((name, age) => `${name}! Goodness me you are ${age}!`);
+    ((name, age) => `Hello ${name}! Goodness me you are ${age}!`);
 
 const printAdam =
     ꓽ `(String → Number → String) → void`
     (helloFn => console.log(helloFn('Adam', 33)));
 
 printAdam(getHello);
+
+window.t = ꓽ;
+window.getName = ꓽ`String -> String`(name => 'Hello ' + name);
+console.log('%cWelcome to %cTypified. ', 'color: #434a54', 'color: #434a54; font-weight: bold');
+console.log(
+    '%cUse %c`t` %cto set types: %cconst getName = t %c`String -> String` %c(name => name)',
+    'color: #656d78',
+    'color: deeppink',
+    'color: #656d78',
+    'color: deeppink',
+    'color: green',
+    'color: deeppink'
+);
+console.log(
+    "%cAnd then call it with different types to test it: %cgetName(%c'Adam'%c) %cand %cgetName(33)",
+    'color: #656d78',
+    'color: deeppink',
+    'color: green',
+    'color: deeppink',
+    'color: #656d78',
+    'color: deeppink'
+);
