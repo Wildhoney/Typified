@@ -1,9 +1,31 @@
+import { parseScalar } from '../utils.js';
 import { splitTopLevel } from '../../parser/utils.js';
 import * as u from './utils.js';
+import { isType } from '../../validator/utils.js';
 
 export default function validateObject(validatorFn, ast, model, generics) {
     const initial = { valid: true, generics };
     const typeMap = u.getTypeMap(ast.declaration);
+
+    if (isType(model)) {
+        const type = model;
+        const { declaration } = parseScalar(type.is);
+        const targetTypeMap = u.getTypeMap(declaration);
+
+        return Object.entries(typeMap).reduce((accum, [key, value]) => {
+            if (!typeMap[key]) {
+                return { valid: false };
+            }
+
+            const types = splitTopLevel(typeMap[key], '|');
+            const result = validatorFn(types, type.set(targetTypeMap[key]), generics);
+
+            return {
+                valid: accum.valid && result.valid,
+                generics: result.generics
+            };
+        }, initial);
+    }
 
     if (Object.keys(model).length !== Object.keys(typeMap).length) {
         return { valid: false };
