@@ -2,7 +2,7 @@ import test from 'ava';
 import * as parser from '../index.js';
 
 test('It should be able to able to parse the declaration using same concrete types;', t => {
-    const declaration = 'String -> String';
+    const declaration = 'String → String';
     t.deepEqual(parser.splitTypeDeclaration(declaration), {
         types: [['String'], ['String']],
         generics: [],
@@ -12,7 +12,7 @@ test('It should be able to able to parse the declaration using same concrete typ
 });
 
 test('It should be able to able to parse the declaration using dissimilar concrete types;', t => {
-    const declaration = 'Number -> String -> Boolean';
+    const declaration = 'Number → String → Boolean';
     t.deepEqual(parser.splitTypeDeclaration(declaration), {
         types: [['Number'], ['String'], ['Boolean']],
         generics: [],
@@ -22,7 +22,7 @@ test('It should be able to able to parse the declaration using dissimilar concre
 });
 
 test('It should be able to able to parse the declaration with introduction of scalar types;', t => {
-    const declaration = 'Date -> Array(Promise) -> Array(Boolean)';
+    const declaration = 'Date → Array(Promise) → Array(Boolean)';
     t.deepEqual(parser.splitTypeDeclaration(declaration), {
         types: [['Date'], ['Array(Promise)'], ['Array(Boolean)']],
         generics: [],
@@ -32,9 +32,9 @@ test('It should be able to able to parse the declaration with introduction of sc
 });
 
 test('It should be able to able to parse the declaration with a function type introduced;', t => {
-    const declaration = 'Date -> (String -> String -> Array(Number)) -> Array(Promise)';
+    const declaration = 'Date → (String → String → Array(Number)) → Array(Promise)';
     t.deepEqual(parser.splitTypeDeclaration(declaration), {
-        types: [['Date'], ['(String -> String -> Array(Number))'], ['Array(Promise)']],
+        types: [['Date'], ['(String → String → Array(Number))'], ['Array(Promise)']],
         generics: [],
         aliases: {},
         declaration
@@ -42,7 +42,7 @@ test('It should be able to able to parse the declaration with a function type in
 });
 
 test('It should be able to able to parse the declaration which has type unions;', t => {
-    const declaration = 'Date -> String|Number -> Array(String)';
+    const declaration = 'Date → String|Number → Array(String)';
     t.deepEqual(parser.splitTypeDeclaration(declaration), {
         types: [['Date'], ['String', 'Number'], ['Array(String)']],
         generics: [],
@@ -52,7 +52,7 @@ test('It should be able to able to parse the declaration which has type unions;'
 });
 
 test('It should be able to able to parse the declaration using scalar union types;', t => {
-    const declaration = 'Date -> Array(String)|Array(Number) -> Array(String)';
+    const declaration = 'Date → Array(String)|Array(Number) → Array(String)';
     t.deepEqual(parser.splitTypeDeclaration(declaration), {
         types: [['Date'], ['Array(String)', 'Array(Number)'], ['Array(String)']],
         generics: [],
@@ -62,9 +62,9 @@ test('It should be able to able to parse the declaration using scalar union type
 });
 
 test('It should be able to able to parse the declaration using function union types;', t => {
-    const declaration = 'a -> (a -> b)|(a -> c) -> b|c';
+    const declaration = 'a → (a → b)|(a → c) → b|c';
     t.deepEqual(parser.splitTypeDeclaration(declaration), {
-        types: [['a'], ['(a -> b)', '(a -> c)'], ['b', 'c']],
+        types: [['a'], ['(a → b)', '(a → c)'], ['b', 'c']],
         generics: [],
         aliases: {},
         declaration
@@ -72,9 +72,9 @@ test('It should be able to able to parse the declaration using function union ty
 });
 
 test('It should be able to able to parse the declaration using function union types 2;', t => {
-    const declaration = 'Array((a -> b)|(a -> c -> (a -> b|c|d))) -> b|c';
+    const declaration = 'Array((a → b)|(a → c → (a → b|c|d))) → b|c';
     t.deepEqual(parser.splitTypeDeclaration(declaration), {
-        types: [['Array((a -> b)|(a -> c -> (a -> b|c|d)))'], ['b', 'c']],
+        types: [['Array((a → b)|(a → c → (a → b|c|d)))'], ['b', 'c']],
         generics: [],
         aliases: {},
         declaration
@@ -82,7 +82,7 @@ test('It should be able to able to parse the declaration using function union ty
 });
 
 test('It should be able to parse the declaration with a single alias;', t => {
-    const declaration = 'String s => s -> s';
+    const declaration = 'String s ⇒ s → s';
     t.deepEqual(parser.splitTypeDeclaration(declaration), {
         types: [['String'], ['String']],
         generics: [],
@@ -92,7 +92,7 @@ test('It should be able to parse the declaration with a single alias;', t => {
 });
 
 test('It should be able to parse the declaration with multiple aliases;', t => {
-    const declaration = 'String s, Number n, Date d => s -> n -> Boolean -> d';
+    const declaration = 'String s, Number n, Date d ⇒ s → n → Boolean → d';
     t.deepEqual(parser.splitTypeDeclaration(declaration), {
         types: [['String'], ['Number'], ['Boolean'], ['Date']],
         generics: [],
@@ -102,7 +102,7 @@ test('It should be able to parse the declaration with multiple aliases;', t => {
 });
 
 test('It should be able to parse the declaration with two generic types added;', t => {
-    const declaration = 'forall a b. String s => s -> a -> b';
+    const declaration = '∀ a b. String s ⇒ s → a → b';
     t.deepEqual(parser.splitTypeDeclaration(declaration), {
         types: [['String'], ['a'], ['b']],
         generics: ['a', 'b'],
@@ -112,9 +112,9 @@ test('It should be able to parse the declaration with two generic types added;',
 });
 
 test('It should be able to parse the declaration with a handful of generic types;', t => {
-    const declaration = 'forall a b c. a -> b -> (a -> b -> c)';
+    const declaration = '∀ a b c. a → b → (a → b → c)';
     t.deepEqual(parser.splitTypeDeclaration(declaration), {
-        types: [['a'], ['b'], ['(a -> b -> c)']],
+        types: [['a'], ['b'], ['(a → b → c)']],
         generics: ['a', 'b', 'c'],
         aliases: {},
         declaration

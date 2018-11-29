@@ -4,7 +4,7 @@ import { createValidator } from '../../../validator/index.js';
 import type from '../../../index.js';
 
 test('It should be able to validate declarations with array types;', t => {
-    const declaration = 'String s => Array(s)';
+    const declaration = 'String s ⇒ Array(s)';
     const ast = parser.splitTypeDeclaration(declaration);
     const validate = createValidator(ast, declaration);
     const expectedTypes = ast.types[0];
@@ -29,45 +29,45 @@ test('It should be able to validate declarations with array types;', t => {
 });
 
 test('It should be able to validate concrete function declarations with array types;', t => {
-    const sayHello = type`Array(String) -> Array(Number)`(
+    const sayHello = type`Array(String) → Array(Number)`(
         (names, ages) => `Hello ${names.join(' & ')}! You are ${ages.reduce((a, b) => a + b, 0)} combined.`
     );
-    const declaration = '(Array(String) -> Array(Number))';
+    const declaration = '(Array(String) → Array(Number))';
     const ast = parser.splitTypeDeclaration(declaration);
     const validate = createValidator(ast, declaration);
     t.deepEqual(validate(ast.types[0], sayHello), {
         valid: true,
-        type: '(Array(String) -> Array(Number))',
+        type: '(Array(String) → Array(Number))',
         generics: {},
         error: null
     });
 });
 
 test('It should be able to validate alias function declarations with array types;', t => {
-    const sayHello = type`String s => Array(s) -> Array(Number)`(
+    const sayHello = type`String s ⇒ Array(s) → Array(Number)`(
         (names, ages) => `Hello ${names.join(' & ')}! You are ${ages.reduce((a, b) => a + b, 0)} combined.`
     );
-    const declaration = 'String str, Number num => (Array(str) -> Array(num))';
+    const declaration = 'String str, Number num ⇒ (Array(str) → Array(num))';
     const ast = parser.splitTypeDeclaration(declaration);
     const validate = createValidator(ast, declaration);
     t.deepEqual(validate(ast.types[0], sayHello), {
         valid: true,
-        type: '(Array(str) -> Array(num))',
+        type: '(Array(str) → Array(num))',
         generics: {},
         error: null
     });
 });
 
 test('It should be able to validate generic function declarations with array types;', t => {
-    const sayHello = type`forall a b. Array(a) -> Array(b)`(
+    const sayHello = type`∀ a b. Array(a) → Array(b)`(
         (names, ages) => `Hello ${names.join(' & ')}! You are ${ages.reduce((a, b) => a + b, 0)} combined.`
     );
-    const declaration = 'forall x. (Array(x) -> Array(Number))';
+    const declaration = '∀ x. (Array(x) → Array(Number))';
     const ast = parser.splitTypeDeclaration(declaration);
     const validate = createValidator(ast, declaration);
     t.deepEqual(validate(ast.types[0], sayHello), {
         valid: true,
-        type: '(Array(x) -> Array(Number))',
+        type: '(Array(x) → Array(Number))',
         generics: {},
         error: null
     });

@@ -10,8 +10,8 @@ test('It should be able to determine if a type is a scalar type;', t => {
         type: 'Object',
         description: 'name: String'
     });
-    t.deepEqual(parserUtils.parseScalar('(String -> Number -> Boolean)'), {
-        description: 'String -> Number -> Boolean',
+    t.deepEqual(parserUtils.parseScalar('(String → Number → Boolean)'), {
+        description: 'String → Number → Boolean',
         type: ''
     });
     t.is(parserUtils.parseScalar('String'), null);

@@ -28,7 +28,7 @@ test('It should be able to validate declarations with concrete types;', t => {
 });
 
 test('It should be able to validate declarations with alias types;', t => {
-    const declaration = 'String s, Number n => s|n';
+    const declaration = 'String s, Number n ⇒ s|n';
     const ast = parser.splitTypeDeclaration(declaration);
     const validate = createValidator(ast, declaration);
     const expectedTypes = ast.types[0];
@@ -53,7 +53,7 @@ test('It should be able to validate declarations with alias types;', t => {
 });
 
 test('It should be able to validate declarations with generic types;', t => {
-    const declaration = 'forall a. a';
+    const declaration = '∀ a. a';
     const ast = parser.splitTypeDeclaration(declaration);
     const validate = createValidator(ast, declaration);
     const expectedTypes = ast.types[0];
