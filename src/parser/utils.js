@@ -13,7 +13,7 @@ export function balanceBrackets(accum, type, aliases) {
         case true:
             const lastGroup = accum.groups[accum.groups.length - 1];
             const lastItem = lastGroup[lastGroup.length - 1];
-            const item = `${lastItem.trim()} -> ${type.trim()}`;
+            const item = `${lastItem.trim()} → ${type.trim()}`;
             return { ...newAccum, groups: [...accum.groups.slice(0, accum.groups.length - 1), [item]] };
         case false:
             return {

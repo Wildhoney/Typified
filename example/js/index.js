@@ -11,10 +11,10 @@ const printAdam =
 printAdam(getHello);
 
 window.t = ꓽ;
-window.getName = ꓽ`String -> String`(name => 'Hello ' + name);
+window.getName = ꓽ`String → String`(name => 'Hello ' + name);
 console.log('%cWelcome to %cTypified. ', 'color: #434a54', 'color: #434a54; font-weight: bold');
 console.log(
-    '%cUse %c`t` %cto set types: %cconst getName = t %c`String -> String` %c(name => name)',
+    '%cUse %c`t` %cto set types: %cconst getName = t %c`String → String` %c(name => name)',
     'color: #656d78',
     'color: deeppink',
     'color: #656d78',
