@@ -7,7 +7,8 @@ const handlers = new Map(
     Object.entries({
         Array: validateArray,
         Object: validateObject,
-        Function: validateFunction
+        Function: validateFunction,
+        ƒ: validateFunction
     })
 );
 
