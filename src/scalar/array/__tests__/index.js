@@ -43,7 +43,7 @@ test('It should be able to validate concrete function declarations with array ty
     });
 });
 
-test('It should be able to validate concrete alias declarations with array types;', t => {
+test('It should be able to validate alias function declarations with array types;', t => {
     const sayHello = type`String s => Array(s) -> Array(Number)`(
         (names, ages) => `Hello ${names.join(' & ')}! You are ${ages.reduce((a, b) => a + b, 0)} combined.`
     );
@@ -53,6 +53,21 @@ test('It should be able to validate concrete alias declarations with array types
     t.deepEqual(validate(ast.types[0], sayHello), {
         valid: true,
         type: '(Array(str) -> Array(num))',
+        generics: {},
+        error: null
+    });
+});
+
+test('It should be able to validate generic function declarations with array types;', t => {
+    const sayHello = type`forall a b. Array(a) -> Array(b)`(
+        (names, ages) => `Hello ${names.join(' & ')}! You are ${ages.reduce((a, b) => a + b, 0)} combined.`
+    );
+    const declaration = 'forall x. (Array(x) -> Array(Number))';
+    const ast = parser.splitTypeDeclaration(declaration);
+    const validate = createValidator(ast, declaration);
+    t.deepEqual(validate(ast.types[0], sayHello), {
+        valid: true,
+        type: '(Array(x) -> Array(Number))',
         generics: {},
         error: null
     });
