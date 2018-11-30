@@ -23,4 +23,4 @@ export function checkReport(report) {
 
 export class TypeMismatchError extends Error {}
 
-export class LengthMismatchError extends Error {
+export class LengthMismatchError extends Error {}
