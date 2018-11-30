@@ -14,7 +14,7 @@
 
 **npm**: `npm install typified --save`
 <br />
-**cdn**: [https://cdn.jsdelivr.net/npm/typified@latest/src/index.js](https://cdn.jsdelivr.net/npm/typified@latest/src/index.js)
+**cdn**: [`https://cdn.jsdelivr.net/npm/typified@latest/src/index.js`](https://cdn.jsdelivr.net/npm/typified@latest/src/index.js)
 
 ## Getting Started
 
