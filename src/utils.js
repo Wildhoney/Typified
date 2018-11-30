@@ -14,13 +14,13 @@ export function concatTemplate(types, expressions) {
         .trim();
 }
 
-export class TypeMismatchError extends Error {}
-
-export class LengthMismatchError extends Error {}
-
 export function checkReport(report) {
     !report.valid &&
         (error => {
             throw new TypeMismatchError(error);
         })(report.error);
 }
+
+export class TypeMismatchError extends Error {}
+
+export class LengthMismatchError extends Error {
