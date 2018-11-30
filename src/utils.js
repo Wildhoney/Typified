@@ -1,6 +1,8 @@
 export const typeDeclaration = Symbol('@typified/type-declaration');
 
-export const isFunction = a => typeof a === 'function';
+export function isFunction(a) {
+    return typeof a === 'function';
+}
 
 export function concatTemplate(types, expressions) {
     return types
@@ -15,3 +17,10 @@ export function concatTemplate(types, expressions) {
 export class TypeMismatchError extends Error {}
 
 export class LengthMismatchError extends Error {}
+
+export function checkReport(report) {
+    !report.valid &&
+        (error => {
+            throw new TypeMismatchError(error);
+        })(report.error);
+}

@@ -5,23 +5,24 @@ import * as u from './utils.js';
 export { addScalarValidator } from './scalar/index.js';
 
 export default function defineType(types, ...expressions) {
-    return a => {
+    return userFunction => {
         const declaration = u.concatTemplate(types, expressions);
 
-        if (u.isFunction(a)) {
+        if (u.isFunction(userFunction)) {
             const f = (...input) => {
-                const output = a(...input);
-                const parameters = [...input, output];
-
                 // Parse the declaration into its own AST, create the validator context and render the first
                 // error encountered if the type declaration is invalid for the values passed.
                 const ast = parser.splitTypeDeclaration(declaration);
-                const validatorFn = createValidator(ast, declaration, parameters);
-                const report = produceValidationReport(validatorFn, ast.types, [...input, output]);
-                !report.valid &&
-                    (error => {
-                        throw new u.TypeMismatchError(error);
-                    })(report.error);
+                const validatorFn = createValidator(ast, declaration);
+
+                const inputTypes = ast.types.slice(0, ast.types.length - 1);
+                const inputReport = produceValidationReport(validatorFn, inputTypes, input);
+                u.checkReport(inputReport);
+
+                const outputTypes = ast.types.slice(ast.types.length - 1);
+                const output = userFunction(...input);
+                const outputReport = produceValidationReport(validatorFn, outputTypes, [output], inputReport.generics);
+                u.checkReport(outputReport);
 
                 return output;
             };
@@ -30,6 +31,6 @@ export default function defineType(types, ...expressions) {
             return f;
         }
 
-        return a;
+        return userFunction;
     };
 }
