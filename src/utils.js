@@ -24,3 +24,16 @@ export function checkReport(report) {
 export class TypeMismatchError extends Error {}
 
 export class LengthMismatchError extends Error {}
+
+export class FakePromise {
+    constructor(value) {
+        this.value = value;
+    }
+    then(f) {
+        return f(this.value);
+    }
+}
+
+export function createPromise(f, isAsync) {
+    return isAsync ? new Promise(f) : new FakePromise(f);
+}
