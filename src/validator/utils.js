@@ -67,3 +67,22 @@ export function determineActualType(value) {
 
     return getType(value);
 }
+
+export function getExpectedTypes(ast, types, generics, fGenerics) {
+    return types.map(
+        type => generics[type] || ast.aliases[type] || Object.keys(fGenerics).find(k => fGenerics[k] === type) || type
+    );
+}
+
+export function mergeGenerics(generics, isTypeValid, genericType, scalarResults, value, actualType) {
+    return {
+        ...generics,
+        ...(isTypeValid &&
+            genericType && {
+                ...scalarResults.generics,
+                ...(isType(value) || (isType(value) && value.isGeneric())
+                    ? { [value.ref]: { ...generics[value.ref], [actualType]: genericType } }
+                    : { [genericType]: actualType })
+            })
+    };
+}

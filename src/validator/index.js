@@ -8,10 +8,7 @@ export function createValidator(ast, declaration) {
         // not be a scalar type at this point.
         const fGenerics = u.isType(value) ? generics[value.ref] || {} : {};
         const actualType = u.getType(value);
-        const expectedTypes = types.map(
-            type =>
-                generics[type] || ast.aliases[type] || Object.keys(fGenerics).find(k => fGenerics[k] === type) || type
-        );
+        const expectedTypes = u.getExpectedTypes(ast, types, generics, fGenerics);
 
         // Find the indices that match either the generic type or the concrete type, recursing when
         // a scalar is found by delegating to the correct scalar validator, if it exists.
@@ -38,16 +35,7 @@ export function createValidator(ast, declaration) {
 
         // Determine if the type is valid and update the generics if the type is indeed valid.
         const isTypeValid = Boolean(matchedType || genericType);
-        const updatedGenerics = {
-            ...generics,
-            ...(isTypeValid &&
-                genericType && {
-                    ...scalarResults.generics,
-                    ...(u.isType(value) || (u.isType(value) && value.isGeneric())
-                        ? { [value.ref]: { ...generics[value.ref], [actualType]: genericType } }
-                        : { [genericType]: actualType })
-                })
-        };
+        const updatedGenerics = u.mergeGenerics(generics, isTypeValid, genericType, scalarResults, value, actualType);
 
         return {
             valid: isTypeValid,
