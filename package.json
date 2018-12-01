@@ -33,6 +33,7 @@
         "babel-eslint": "^10.0.1",
         "browser-env": "^3.2.5",
         "core-js": "^2.5.7",
+        "coveralls": "^3.0.2",
         "eslint": "^5.9.0",
         "eslint-config-prettier": "^3.3.0",
         "eslint-config-standard": "^12.0.0",
@@ -42,7 +43,9 @@
         "eslint-plugin-standard": "^4.0.0",
         "esm": "^3.0.84",
         "express": "^4.16.4",
-        "prettier": "^1.15.2",
+        "nyc": "^13.1.0",
+        "prettier": "^1.15.3",
+        "sinon": "^7.1.1",
         "taskfile": "^0.8.5"
     },
     "ava": {
@@ -53,9 +56,5 @@
             "browser-env"
         ]
     },
-    "dependencies": {
-        "coveralls": "^3.0.2",
-        "nyc": "^13.1.0",
-        "sinon": "^7.1.1"
-    }
+    "dependencies": {}
 }
