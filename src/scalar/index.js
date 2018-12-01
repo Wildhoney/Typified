@@ -1,6 +1,7 @@
 import validateArray from './array/index.js';
 import validateObject from './object/index.js';
 import validateFunction from './function/index.js';
+import validatePromise from './promise/index.js';
 import * as u from './utils.js';
 
 const handlers = new Map(
@@ -8,7 +9,8 @@ const handlers = new Map(
         Array: validateArray,
         Object: validateObject,
         Function: validateFunction,
-        ƒ: validateFunction
+        ƒ: validateFunction,
+        Promise: validatePromise
     })
 );
 
