@@ -1,5 +1,5 @@
 import * as prq from 'promisesque';
-// import * as prq from 'https://cdn.jsdelivr.net/npm/promisesque@0.1.1/src/index.js';
+// import * as prq from 'https://cdn.jsdelivr.net/npm/promisesque@0.1.2/src/index.js';
 import * as u from './utils.js';
 import { validateScalar } from '../scalar/index.js';
 
@@ -70,22 +70,23 @@ export function produceValidationReport(validatorFn, types, values, generics = {
         (accum, type, index) => {
             const value = values[index];
             const report = validatorFn(type, value, accum.generics);
-            return prq.create(report, report =>( { reports: [...accum.reports, report], generics: { ...accum.generics, ...report.generics } }) )
+            return prq.create(report, report => ({
+                reports: [...accum.reports, report],
+                generics: { ...accum.generics, ...report.generics }
+            }));
         },
         { reports: [], generics }
     );
 
     return prq.create(result, result => {
-
         const firstInvalidReport = result.reports.find(report => !report.valid);
         const error = firstInvalidReport ? firstInvalidReport.error : null;
-    
+
         return {
             valid: result.reports.every(report => report.valid),
             reports: result.reports,
             generics: result.generics,
             error
         };
-
-    })
+    });
 }
