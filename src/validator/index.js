@@ -1,3 +1,4 @@
+import * as prq from 'promisesque';
 import * as u from './utils.js';
 import { validateScalar } from '../scalar/index.js';
 
@@ -18,12 +19,7 @@ export function createValidator(ast, declaration) {
                 : { valid: expectedType === actualType };
         });
 
-        // Determine which Promise.all implementation to use, either the async or sync version so that a promise
-        // is only yielded when a promise type has been included.
-        const hasPromise = u.containsPromise(matchedResults);
-        const allHandler = u.getPromiseAllHandler(hasPromise);
-
-        return allHandler(matchedResults).then(matchedResults => {
+        return prq.all(matchedResults, matchedResults => {
             const matchedTypeIndex = matchedResults.findIndex(({ valid }) => valid);
             const genericTypeIndex = expectedTypes.findIndex(expectedType =>
                 u.isType(value) && value.isGeneric()

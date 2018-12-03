@@ -91,11 +91,3 @@ export function mergeGenerics(generics, isTypeValid, genericType, scalarResults,
             })
     };
 }
-
-export function getPromiseAllHandler(hasPromise) {
-    return hasPromise ? Promise.all.bind(Promise) : a => ({ then: f => f(a) });
-}
-
-export function containsPromise(matchedResults) {
-    return matchedResults.some(result => result instanceof Promise);
-}
