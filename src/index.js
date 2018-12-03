@@ -1,3 +1,5 @@
+import * as prq from 'promisesque';
+// import * as prq from 'https://cdn.jsdelivr.net/npm/promisesque@0.1.1/src/index.js';
 import * as parser from './parser/index.js';
 import { createValidator, produceValidationReport } from './validator/index.js';
 import * as u from './utils.js';
@@ -17,14 +19,24 @@ export default function defineType(types, ...expressions) {
 
                 const inputTypes = ast.types.slice(0, ast.types.length - 1);
                 const inputReport = produceValidationReport(validatorFn, inputTypes, input);
-                u.checkReport(inputReport);
 
-                const outputTypes = ast.types.slice(ast.types.length - 1);
-                const output = userFunction(...input);
-                const outputReport = produceValidationReport(validatorFn, outputTypes, [output], inputReport.generics);
-                u.checkReport(outputReport);
+                return prq.create(inputReport, inputReport => {
+                    u.checkReport(inputReport);
 
-                return output;
+                    const outputTypes = ast.types.slice(ast.types.length - 1);
+                    const output = userFunction(...input);
+                    const outputReport = produceValidationReport(
+                        validatorFn,
+                        outputTypes,
+                        [output],
+                        inputReport.generics
+                    );
+
+                    return prq.create(outputReport, outputReport => {
+                        u.checkReport(outputReport);
+                        return output;
+                    });
+                });
             };
 
             f[u.typeDeclaration] = declaration;

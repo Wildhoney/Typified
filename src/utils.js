@@ -15,6 +15,7 @@ export function concatTemplate(types, expressions) {
 }
 
 export function checkReport(report) {
+
     !report.valid &&
         (error => {
             throw new TypeMismatchError(error);
