@@ -17,39 +17,54 @@ export function createValidator(ast, declaration) {
                 ? validateScalar(validatorFn, expectedType, value, generics, ast.aliases)
                 : { valid: expectedType === actualType };
         });
-        const matchedTypeIndex = matchedResults.findIndex(({ valid }) => valid);
-        const genericTypeIndex = expectedTypes.findIndex(expectedType =>
-            u.isType(value) && value.isGeneric()
-                ? !generics[value.ref] || !(expectedType in generics[value.ref])
-                : ast.generics.includes(expectedType) && !(expectedType in generics)
-        );
 
-        // Resolved the above indices to actual types, either concrete or generic. Also find the `originalType`
-        // which is the type that matched from the types past to the function initially.
-        const matchedType = expectedTypes[matchedTypeIndex];
-        const genericType = !matchedType && expectedTypes[genericTypeIndex];
-        const originalType = types[genericTypeIndex] || types[matchedTypeIndex];
+        // Determine which Promise.all implementation to use, either the async or sync version so that a promise
+        // is only yielded when a promise type has been included.
+        const hasPromise = u.containsPromise(matchedResults);
+        const allHandler = u.getPromiseAllHandler(hasPromise);
 
-        // If we have a matched type then take the generics and the message from that result.
-        const scalarResults = matchedResults[matchedTypeIndex] || {};
+        return allHandler(matchedResults).then(matchedResults => {
+            const matchedTypeIndex = matchedResults.findIndex(({ valid }) => valid);
+            const genericTypeIndex = expectedTypes.findIndex(expectedType =>
+                u.isType(value) && value.isGeneric()
+                    ? !generics[value.ref] || !(expectedType in generics[value.ref])
+                    : ast.generics.includes(expectedType) && !(expectedType in generics)
+            );
 
-        // Determine if the type is valid and update the generics if the type is indeed valid.
-        const isTypeValid = Boolean(matchedType || genericType);
-        const updatedGenerics = u.mergeGenerics(generics, isTypeValid, genericType, scalarResults, value, actualType);
+            // Resolved the above indices to actual types, either concrete or generic. Also find the `originalType`
+            // which is the type that matched from the types past to the function initially.
+            const matchedType = expectedTypes[matchedTypeIndex];
+            const genericType = !matchedType && expectedTypes[genericTypeIndex];
+            const originalType = types[genericTypeIndex] || types[matchedTypeIndex];
 
-        return {
-            valid: isTypeValid,
-            type: isTypeValid ? originalType : actualType,
-            generics: updatedGenerics,
-            error: isTypeValid
-                ? null
-                : u.formatTypeMismatchMessage(
-                      expectedTypes,
-                      u.determineActualType(value),
-                      declaration,
-                      scalarResults.message
-                  )
-        };
+            // If we have a matched type then take the generics and the message from that result.
+            const scalarResults = matchedResults[matchedTypeIndex] || {};
+
+            // Determine if the type is valid and update the generics if the type is indeed valid.
+            const isTypeValid = Boolean(matchedType || genericType);
+            const updatedGenerics = u.mergeGenerics(
+                generics,
+                isTypeValid,
+                genericType,
+                scalarResults,
+                value,
+                actualType
+            );
+
+            return {
+                valid: isTypeValid,
+                type: isTypeValid ? originalType : actualType,
+                generics: updatedGenerics,
+                error: isTypeValid
+                    ? null
+                    : u.formatTypeMismatchMessage(
+                          expectedTypes,
+                          u.determineActualType(value),
+                          declaration,
+                          scalarResults.message
+                      )
+            };
+        });
     };
 }
 
