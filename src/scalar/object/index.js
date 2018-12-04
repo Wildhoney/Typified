@@ -1,16 +1,15 @@
-import { parseScalar } from '../utils.js';
-import { splitTopLevel } from '../../parser/utils.js';
+import { splitTopLevel, parseScalar } from '../../parser/utils.js';
 import * as u from './utils.js';
 import { isType } from '../../validator/utils.js';
 
 export default function validateObject(validatorFn, ast, model, generics) {
     const initial = { valid: true, generics };
-    const typeMap = u.getTypeMap(ast.declaration);
+    const typeMap = u.getTypeMap(ast.description);
 
     if (isType(model)) {
         const type = model;
-        const { declaration } = parseScalar(type.is);
-        const targetTypeMap = u.getTypeMap(declaration);
+        const { description } = parseScalar(type.is);
+        const targetTypeMap = u.getTypeMap(description);
 
         return Object.entries(typeMap).reduce((accum, [key, value]) => {
             if (!typeMap[key]) {

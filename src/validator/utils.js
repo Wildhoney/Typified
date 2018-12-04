@@ -1,4 +1,4 @@
-import { parseScalar } from '../scalar/utils.js';
+import { parseScalar } from '../parser/utils.js';
 import { isFunction, typeDeclaration } from '../utils.js';
 
 export class Type {

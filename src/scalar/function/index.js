@@ -8,7 +8,7 @@ export default function validateFunction(validatorFn, ast, value, generics) {
     }
 
     const initial = { valid: true, generics };
-    const localAst = splitTypeDeclaration(ast.declaration);
+    const localAst = splitTypeDeclaration(ast.description);
     const foreignAst = splitTypeDeclaration(value[typeDeclaration]);
     const newType = new Type(null, foreignAst);
 
