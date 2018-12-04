@@ -48,19 +48,14 @@ export function createValidator(ast, declaration) {
                 actualType
             );
 
-            return {
+            return prq.create(u.determineActualType(value), actualType => ({
                 valid: isTypeValid,
                 type: isTypeValid ? originalType : actualType,
                 generics: updatedGenerics,
                 error: isTypeValid
                     ? null
-                    : u.formatTypeMismatchMessage(
-                          expectedTypes,
-                          u.determineActualType(value),
-                          declaration,
-                          scalarResults.message
-                      )
-            };
+                    : u.formatTypeMismatchMessage(expectedTypes, actualType, declaration, scalarResults.message)
+            }));
         });
     };
 }
