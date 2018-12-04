@@ -49,28 +49,32 @@ export function determineActualType(value) {
     const isFunctionLike = isFunction(value);
     const isPromiseLike = value instanceof Promise;
 
-    if (isArrayLike) {
-        const collection = value;
-        const types = collection.map(determineActualType);
-        return `Array(${Array.from(new Set(types)).join(', ')})`;
-    }
+    switch (true) {
+        case isArrayLike: {
+            const collection = value;
+            const types = collection.map(determineActualType);
+            return `Array(${Array.from(new Set(types)).join(', ')})`;
+        }
 
-    if (isPromiseLike) {
-        return value.then(value => `Promise(${determineActualType(value)})`);
-    }
+        case isPromiseLike: {
+            const promise = value;
+            return promise.then(value => `Promise(${determineActualType(value)})`);
+        }
 
-    if (isObjectLike) {
-        const model = value;
-        const types = Object.entries(model).map(([key, value]) => `${key}: ${determineActualType(value)}`);
-        return `${getType(value)}(${types.join(', ')})`;
-    }
+        case isObjectLike: {
+            const model = value;
+            const types = Object.entries(model).map(([key, value]) => `${key}: ${determineActualType(value)}`);
+            return `${getType(value)}(${types.join(', ')})`;
+        }
 
-    if (isFunctionLike) {
-        const fn = value;
-        return `(${fn[typeDeclaration]})`;
-    }
+        case isFunctionLike: {
+            const fn = value;
+            return `(${fn[typeDeclaration]})`;
+        }
 
-    return getType(value);
+        default:
+            return getType(value);
+    }
 }
 
 export function getExpectedTypes(ast, types, generics, fGenerics) {
