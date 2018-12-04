@@ -46,6 +46,8 @@ test('It should be able to handle `Type` values;', t => {
 });
 
 test('It should be able to determine the actual type of values;', async t => {
+    t.is(u.determineActualType(null), 'void');
+    t.is(u.determineActualType(undefined), 'void');
     t.is(u.determineActualType('Adam'), 'String');
     t.is(u.determineActualType(33), 'Number');
     t.is(u.determineActualType(['Adam']), 'Array(String)');
@@ -62,4 +64,27 @@ test('It should be able to determine the actual type of values;', async t => {
         u.determineActualType({ names: { first: 'Adam', last: 'Timberlake' }, age: 33, locations: ['UK', 'RU'] }),
         'Object(names: Object(first: String, last: String), age: Number, locations: Array(String))'
     );
+});
+
+test('It should be able to determine when a type is a scalar;', t => {
+    t.true(u.isScalar('Array(String)'));
+    t.true(u.isScalar('Promise(a)'));
+    t.false(u.isScalar('Date'));
+    t.false(u.isScalar('String'));
+});
+
+test('It should be able to determine when a value is a `Type`;', t => {
+    t.true(u.isType(new u.Type('String', {})));
+    t.false('Adam');
+    t.false(33);
+});
+
+test.skip('It should be able to clone the `Type` instance when using `set`;', t => {
+    const type = new u.Type('String', splitTypeDeclaration('String'));
+    t.is(type.get(), 'String');
+    const { ast, ref } = type;
+    const newType = type.set('Number');
+    t.is(newType.ast, ast);
+    t.is(newType.ref, ref);
+    t.is(type.get(), 'Number');
 });
