@@ -64,12 +64,19 @@ test('It should be able to validate concrete function declarations with promise 
     const sayHello = type`Promise(String) → Promise(Number)`(
         (names, ages) => `Hello ${names.join(' & ')}! You are ${ages.reduce((a, b) => a + b, 0)} combined.`
     );
-    const declaration = '(Promise(String) → Promise(Number))';
+    const declaration =
+        'forall a. String s => (Promise(String) → Promise(Number)) → (Promise(Number|a) -> Promise(Number|s))';
     const ast = parser.splitTypeDeclaration(declaration);
     const validate = createValidator(ast, declaration);
     t.deepEqual(validate(ast.types[0], sayHello), {
         valid: true,
         type: '(Promise(String) → Promise(Number))',
+        generics: {},
+        error: null
+    });
+    t.deepEqual(validate(ast.types[1], sayHello), {
+        valid: true,
+        type: '(Promise(Number|a) → Promise(Number|s))',
         generics: {},
         error: null
     });
