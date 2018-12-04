@@ -16,7 +16,7 @@ test('It should be able to validate declarations with array types;', t => {
     });
     t.deepEqual(validate(expectedTypes, ['Adam', 33]), {
         valid: false,
-        type: 'Array',
+        type: 'Array(String, Number)',
         generics: {},
         error: `Expected Array(s) in \`${declaration}\` declaration but received Array(String, Number).`
     });

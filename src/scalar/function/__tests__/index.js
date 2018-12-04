@@ -37,7 +37,7 @@ test('It should be able to validate declarations with concrete function types;',
     });
     t.deepEqual(validate(ast.types[2], sayHello), {
         valid: false,
-        type: 'Function',
+        type: '(String → Number → String)',
         generics: {},
         error: `Expected (String → String → String) in \`${declaration}\` declaration but received (String → Number → String).`
     });
@@ -62,7 +62,7 @@ test('It should be able to validate declarations with alias function types;', t 
     });
     t.deepEqual(validate(ast.types[2], sayHello), {
         valid: false,
-        type: 'Function',
+        type: '(String s ⇒ s → Number → s)',
         generics: {},
         error: `Expected (d → n → String) in \`${declaration}\` declaration but received (String s ⇒ s → Number → s).`
     });
@@ -87,13 +87,13 @@ test('It should be able to validate declarations with generic function types;', 
     });
     t.deepEqual(validate(ast.types[2], sayHello), {
         valid: false,
-        type: 'Function',
+        type: '(String → Number → String)',
         generics: {},
         error: `Expected (a → a → a) in \`${declaration}\` declaration but received (String → Number → String).`
     });
     t.deepEqual(validate(ast.types[3], sayHello), {
         valid: false,
-        type: 'Function',
+        type: '(String → Number → String)',
         generics: {},
         error: `Expected (x → y → z) in \`${declaration}\` declaration but received (String → Number → String).`
     });
@@ -118,14 +118,14 @@ test('It should be able to validate declarations with reversed generic function 
     });
     t.deepEqual(validate(ast.types[2], sayHello), {
         valid: false,
-        type: 'Function',
+        type: '(∀ a b. a → b → a)',
         generics: {},
         error:
             'Expected (s → s → s) in `∀ s n. (s → n → s) → (String → Number → String) → (s → s → s) → (s → n → n)` declaration but received (∀ a b. a → b → a).'
     });
     t.deepEqual(validate(ast.types[3], sayHello), {
         valid: false,
-        type: 'Function',
+        type: '(∀ a b. a → b → a)',
         generics: {},
         error:
             'Expected (s → n → n) in `∀ s n. (s → n → s) → (String → Number → String) → (s → s → s) → (s → n → n)` declaration but received (∀ a b. a → b → a).'

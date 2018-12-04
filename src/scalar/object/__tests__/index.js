@@ -16,13 +16,13 @@ test('It should be able to validate declarations with object types;', t => {
     });
     t.deepEqual(validate(expectedTypes, { name: 'Adam' }), {
         valid: false,
-        type: 'Object',
+        type: 'Object(name: String)',
         generics: {},
         error: `Expected Object(name: s, age: Number) in \`${declaration}\` declaration but received Object(name: String).`
     });
     t.deepEqual(validate(expectedTypes, { name: 'Adam', age: 33, location: 'Watford, UK' }), {
         valid: false,
-        type: 'Object',
+        type: 'Object(name: String, age: Number, location: String)',
         generics: {},
         error: `Expected Object(name: s, age: Number) in \`${declaration}\` declaration but received Object(name: String, age: Number, location: String).`
     });
