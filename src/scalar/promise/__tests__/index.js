@@ -16,9 +16,9 @@ test('It should be able to validate declarations with concrete promise types;', 
     });
     t.deepEqual(await validate(expectedTypes, Promise.resolve(33)), {
         valid: false,
-        type: 'Promise',
+        type: 'Promise(Number)',
         generics: {},
-        error: 'Expected Promise(String) in `Promise(String)` declaration but received Promise.'
+        error: 'Expected Promise(String) in `Promise(String)` declaration but received Promise(Number).'
     });
 });
 
@@ -35,9 +35,9 @@ test('It should be able to validate declarations with alias promise types;', asy
     });
     t.deepEqual(await validate(expectedTypes, Promise.resolve(33)), {
         valid: false,
-        type: 'Promise',
+        type: 'Promise(Number)',
         generics: {},
-        error: 'Expected Promise(s) in `String s => Promise(s)` declaration but received Promise.'
+        error: 'Expected Promise(s) in `String s => Promise(s)` declaration but received Promise(Number).'
     });
 });
 
@@ -54,9 +54,9 @@ test('It should be able to validate declarations with generic promise types;', a
     });
     t.deepEqual(await validate(expectedTypes, Promise.resolve('Adam'), { a: 'Number' }), {
         valid: false,
-        type: 'Promise',
+        type: 'Promise(String)',
         generics: { a: 'Number' },
-        error: 'Expected Promise(a) in `forall a. Promise(a)` declaration but received Promise.'
+        error: 'Expected Promise(a) in `forall a. Promise(a)` declaration but received Promise(String).'
     });
 });
 

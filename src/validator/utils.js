@@ -47,7 +47,7 @@ export function determineActualType(value) {
     const isArrayLike = Array.isArray(value);
     const isObjectLike = value instanceof Object && Object.keys(value).length > 0;
     const isFunctionLike = isFunction(value);
-    // const isPromiseLike = value instanceof Promise
+    const isPromiseLike = value instanceof Promise;
 
     if (isArrayLike) {
         const collection = value;
@@ -55,9 +55,9 @@ export function determineActualType(value) {
         return `Array(${Array.from(new Set(types)).join(', ')})`;
     }
 
-    // if (isPromiseLike) {
-    //     return value.then(value => `Promise(${determineActualType(value)})`)
-    // }
+    if (isPromiseLike) {
+        return value.then(value => `Promise(${determineActualType(value)})`);
+    }
 
     if (isObjectLike) {
         const model = value;
