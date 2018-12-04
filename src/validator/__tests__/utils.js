@@ -74,17 +74,17 @@ test('It should be able to determine when a type is a scalar;', t => {
 });
 
 test('It should be able to determine when a value is a `Type`;', t => {
-    t.true(u.isType(new u.Type('String', {})));
-    t.false('Adam');
-    t.false(33);
+    t.true(u.isType(new u.Type('String', splitTypeDeclaration('String'))));
+    t.false(u.isType('Adam'));
+    t.false(u.isType(33));
 });
 
-test.skip('It should be able to clone the `Type` instance when using `set`;', t => {
+test('It should be able to clone the `Type` instance when using `set`;', t => {
     const type = new u.Type('String', splitTypeDeclaration('String'));
     t.is(type.get(), 'String');
     const { ast, ref } = type;
     const newType = type.set('Number');
     t.is(newType.ast, ast);
     t.is(newType.ref, ref);
-    t.is(type.get(), 'Number');
+    t.is(newType.get(), 'Number');
 });
