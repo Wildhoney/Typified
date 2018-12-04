@@ -48,7 +48,7 @@ export function createValidator(ast, declaration) {
                 actualType
             );
 
-            return prq.create(u.determineActualType(value), actualType => ({
+            return prq.get(u.determineActualType(value), actualType => ({
                 valid: isTypeValid,
                 type: isTypeValid ? originalType : actualType,
                 generics: updatedGenerics,
@@ -65,7 +65,7 @@ export function produceValidationReport(validatorFn, types, values, generics = {
         (accum, type, index) => {
             const value = values[index];
             const report = validatorFn(type, value, accum.generics);
-            return prq.create(report, report => ({
+            return prq.get(report, report => ({
                 reports: [...accum.reports, report],
                 generics: { ...accum.generics, ...report.generics }
             }));
@@ -73,7 +73,7 @@ export function produceValidationReport(validatorFn, types, values, generics = {
         { reports: [], generics }
     );
 
-    return prq.create(result, result => {
+    return prq.get(result, result => {
         const firstInvalidReport = result.reports.find(report => !report.valid);
         const error = firstInvalidReport ? firstInvalidReport.error : null;
 

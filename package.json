@@ -45,7 +45,7 @@
         "express": "^4.16.4",
         "nyc": "^13.1.0",
         "prettier": "^1.15.3",
-        "promisesque": "^0.1.2",
+        "promisesque": "^0.2.0",
         "sinon": "^7.1.1",
         "taskfile": "^0.8.5"
     },
