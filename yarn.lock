@@ -4079,10 +4079,10 @@ node-pre-gyp@^0.6.2:
     tar "^2.2.1"
     tar-pack "^3.4.0"
 
-node-url-imports@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/node-url-imports/-/node-url-imports-0.1.0.tgz#6c8bbfa0157c2e5c50de7225e9556615c1f1abe4"
-  integrity sha512-LifYcFq2RoIimiOKVyNF/8VURvZaDLdJ/YKuDJ0IaKLv06AvQ3+O1H2tz5KcJ6rMvEpbMddvO4i3LVwUC7dihA==
+node-url-imports@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/node-url-imports/-/node-url-imports-0.2.0.tgz#4e57ad7601afe597c970de39ff0b9e84133a4be7"
+  integrity sha512-bxmahvAolfY3rOg/khYbiaey8wGv8DwXpiD+J4cwfhWOTKuU58UBmZnoOiqPAMUzGUE0d5k45uYlsN4u8q5r/w==
 
 nopt@^4.0.1:
   version "4.0.1"
