@@ -60,7 +60,11 @@ export function createValidator(ast, declaration) {
 }
 
 export function produceValidationReport(validatorFn, types, values, declaration, generics = {}) {
-    if (types.length !== values.length) {
+    const voidTypes = types.reduce((count, type) => {
+        return type.includes('void') ? count + 1 : count;
+    }, 0);
+
+    if (types.length !== values.length && types.length - voidTypes !== values.length) {
         return {
             valid: false,
             reports: [],

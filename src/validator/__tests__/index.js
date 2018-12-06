@@ -78,10 +78,10 @@ test('It should be able to validate declarations with generic types;', t => {
 });
 
 test('It should be able to validate on the argument length versus types length;', t => {
-    const declaration = 'String → String → String';
+    const declaration = 'String → String';
     const ast = parser.splitTypeDeclaration(declaration);
     const validate = createValidator(ast, declaration);
-    t.deepEqual(produceValidationReport(validate, ast.types.slice(0, 2), ['Adam', 'Maria'], declaration), {
+    t.deepEqual(produceValidationReport(validate, ast.types, ['Adam', 'Maria'], declaration), {
         valid: true,
         reports: [
             { valid: true, type: 'String', generics: {}, error: null },
@@ -90,16 +90,76 @@ test('It should be able to validate on the argument length versus types length;'
         generics: {},
         error: null
     });
-    t.deepEqual(produceValidationReport(validate, ast.types.slice(0, 2), ['Adam'], declaration), {
+    t.deepEqual(produceValidationReport(validate, ast.types, ['Adam'], declaration), {
         valid: false,
         reports: [],
         generics: {},
-        error: 'Expected 2 function parameters but received 1 parameter in `String → String → String`.'
+        error: 'Expected 2 function parameters but received 1 parameter in `String → String`.'
     });
     t.deepEqual(produceValidationReport(validate, ast.types.slice(0, 1), ['Adam', 'Maria'], declaration), {
         valid: false,
         reports: [],
         generics: {},
-        error: 'Expected 1 function parameter but received 2 parameters in `String → String → String`.'
+        error: 'Expected 1 function parameter but received 2 parameters in `String → String`.'
+    });
+});
+
+test('It should be able to validate on argument length with concrete `void` types;', t => {
+    const declaration = 'String → void|String';
+    const ast = parser.splitTypeDeclaration(declaration);
+    const validate = createValidator(ast, declaration);
+    t.deepEqual(produceValidationReport(validate, ast.types, ['Adam'], declaration), {
+        valid: true,
+        reports: [
+            { valid: true, type: 'String', generics: {}, error: null },
+            { valid: true, type: 'void', generics: {}, error: null }
+        ],
+        generics: {},
+        error: null
+    });
+    t.deepEqual(produceValidationReport(validate, ast.types, ['Adam', 'Maria'], declaration), {
+        valid: true,
+        reports: [
+            { valid: true, type: 'String', generics: {}, error: null },
+            { valid: true, type: 'String', generics: {}, error: null }
+        ],
+        generics: {},
+        error: null
+    });
+    t.deepEqual(produceValidationReport(validate, ast.types, ['Adam', 'Maria', '...'], declaration), {
+        valid: false,
+        reports: [],
+        generics: {},
+        error: 'Expected 2 function parameters but received 3 parameters in `String → void|String`.'
+    });
+});
+
+test('It should be able to validate on argument length with alias `void` types;', t => {
+    const declaration = 'String s, void v ⇒ String → v|s';
+    const ast = parser.splitTypeDeclaration(declaration);
+    const validate = createValidator(ast, declaration);
+    t.deepEqual(produceValidationReport(validate, ast.types, ['Adam'], declaration), {
+        valid: true,
+        reports: [
+            { valid: true, type: 'String', generics: {}, error: null },
+            { valid: true, type: 'void', generics: {}, error: null }
+        ],
+        generics: {},
+        error: null
+    });
+    t.deepEqual(produceValidationReport(validate, ast.types, ['Adam', 'Maria'], declaration), {
+        valid: true,
+        reports: [
+            { valid: true, type: 'String', generics: {}, error: null },
+            { valid: true, type: 'String', generics: {}, error: null }
+        ],
+        generics: {},
+        error: null
+    });
+    t.deepEqual(produceValidationReport(validate, ast.types, ['Adam', 'Maria', '...'], declaration), {
+        valid: false,
+        reports: [],
+        generics: {},
+        error: 'Expected 2 function parameters but received 3 parameters in `String s, void v ⇒ String → v|s`.'
     });
 });
