@@ -32,7 +32,7 @@
         "ava": "^0.25.0",
         "babel-eslint": "^10.0.1",
         "browser-env": "^3.2.5",
-        "core-js": "^2.5.7",
+        "core-js": "^2.6.0",
         "coveralls": "^3.0.2",
         "eslint": "^5.9.0",
         "eslint-config-prettier": "^3.3.0",
@@ -43,6 +43,7 @@
         "eslint-plugin-standard": "^4.0.0",
         "esm": "^3.0.84",
         "express": "^4.16.4",
+        "node-url-imports": "^0.1.0",
         "nyc": "^13.1.0",
         "prettier": "^1.15.3",
         "sinon": "^7.1.1",
@@ -51,14 +52,14 @@
     "ava": {
         "failFast": true,
         "require": [
-            "esm",
             "core-js",
-            "browser-env",
-            "./helpers/mock.js"
+            "esm",
+            "./test.js",
+            "node-url-imports",
+            "browser-env"
         ]
     },
     "dependencies": {
-        "mock-require": "^3.0.2",
         "promisesque": "^0.2.0"
     }
 }
