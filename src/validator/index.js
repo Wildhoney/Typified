@@ -1,4 +1,4 @@
-import * as prq from 'https://cdn.jsdelivr.net/npm/promisesque@2.0.0/src/index.js';
+import * as prq from 'https://cdn.jsdelivr.net/npm/promisesque@0.2.0/src/index.js';
 import * as u from './utils.js';
 import { validateScalar } from '../scalar/index.js';
 

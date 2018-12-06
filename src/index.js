@@ -1,4 +1,4 @@
-import * as prq from 'https://cdn.jsdelivr.net/npm/promisesque@2.0.0/src/index.js';
+import * as prq from 'https://cdn.jsdelivr.net/npm/promisesque@0.2.0/src/index.js';
 import * as parser from './parser/index.js';
 import { createValidator, produceValidationReport } from './validator/index.js';
 import * as u from './utils.js';
