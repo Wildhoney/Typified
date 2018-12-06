@@ -17,7 +17,7 @@ export default function defineType(types, ...expressions) {
                 const validatorFn = createValidator(ast, declaration);
 
                 const inputTypes = ast.types.slice(0, ast.types.length - 1);
-                const inputReport = produceValidationReport(validatorFn, inputTypes, input);
+                const inputReport = produceValidationReport(validatorFn, inputTypes, input, declaration);
 
                 return prq.get(inputReport, inputReport => {
                     u.checkReport(inputReport);
@@ -28,6 +28,7 @@ export default function defineType(types, ...expressions) {
                         validatorFn,
                         outputTypes,
                         [output],
+                        declaration,
                         inputReport.generics
                     );
 

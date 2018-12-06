@@ -35,8 +35,15 @@ export function formatTypeMismatchMessage(expectedTypes, actualType, declaration
     return message ? `${value} (${message}).` : `${value}.`;
 }
 
+function pluralise(word, count) {
+    return count === 1 ? word : `${word}s`;
+}
+
 export function formatLengthMismatchMessage(expectedCount, actualCount, declaration) {
-    return `Expected ${expectedCount} function parameters but received ${actualCount} in \`${declaration}\`.`;
+    return `Expected ${expectedCount} function ${pluralise(
+        'parameter',
+        expectedCount
+    )} but received ${actualCount} ${pluralise('parameter', actualCount)} in \`${declaration}\`.`;
 }
 
 export function isScalar(type) {

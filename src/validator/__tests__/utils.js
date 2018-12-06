@@ -19,7 +19,7 @@ test('It should be able to format the type mismatch and length messages;', t => 
     );
     t.is(
         u.formatLengthMismatchMessage(3, 2, 'Number → String → Date'),
-        'Expected 3 function parameters but received 2 in `Number → String → Date`.'
+        'Expected 3 function parameters but received 2 parameters in `Number → String → Date`.'
     );
 });
 

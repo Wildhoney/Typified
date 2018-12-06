@@ -59,7 +59,16 @@ export function createValidator(ast, declaration) {
     };
 }
 
-export function produceValidationReport(validatorFn, types, values, generics = {}) {
+export function produceValidationReport(validatorFn, types, values, declaration, generics = {}) {
+    if (types.length !== values.length) {
+        return {
+            valid: false,
+            reports: [],
+            generics,
+            error: u.formatLengthMismatchMessage(types.length, values.length, declaration)
+        };
+    }
+
     const result = types.reduce(
         (accum, type, index) => {
             const value = values[index];

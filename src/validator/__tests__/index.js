@@ -1,6 +1,6 @@
 import test from 'ava';
 import * as parser from '../../parser/index.js';
-import { createValidator } from '../index.js';
+import { createValidator, produceValidationReport } from '../index.js';
 
 test('It should be able to validate declarations with concrete types;', t => {
     const declaration = 'String|Number';
@@ -74,5 +74,32 @@ test('It should be able to validate declarations with generic types;', t => {
         type: 'Number',
         generics: { a: 'String' },
         error: `Expected String in \`${declaration}\` declaration but received Number.`
+    });
+});
+
+test('It should be able to validate on the argument length versus types length;', t => {
+    const declaration = 'String → String → String';
+    const ast = parser.splitTypeDeclaration(declaration);
+    const validate = createValidator(ast, declaration);
+    t.deepEqual(produceValidationReport(validate, ast.types.slice(0, 2), ['Adam', 'Maria'], declaration), {
+        valid: true,
+        reports: [
+            { valid: true, type: 'String', generics: {}, error: null },
+            { valid: true, type: 'String', generics: {}, error: null }
+        ],
+        generics: {},
+        error: null
+    });
+    t.deepEqual(produceValidationReport(validate, ast.types.slice(0, 2), ['Adam'], declaration), {
+        valid: false,
+        reports: [],
+        generics: {},
+        error: 'Expected 2 function parameters but received 1 parameter in `String → String → String`.'
+    });
+    t.deepEqual(produceValidationReport(validate, ast.types.slice(0, 1), ['Adam', 'Maria'], declaration), {
+        valid: false,
+        reports: [],
+        generics: {},
+        error: 'Expected 1 function parameter but received 2 parameters in `String → String → String`.'
     });
 });
