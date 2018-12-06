@@ -1,6 +1,6 @@
 {
     "name": "typified",
-    "version": "0.5.0",
+    "version": "0.6.0",
     "description": "An experimental implementation of first class functional types using pure ES at runtime, inspired by Haskell, PureScript and Idris.",
     "main": "src/index.js",
     "scripts": {
