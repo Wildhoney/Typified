@@ -4,6 +4,12 @@ import * as u from './utils.js';
 export default function createReporter(ast, validatorFn) {
     function reporterFn(types, position = 0) {
         return (values, generics = {}) => {
+            const lengthReport = u.validateLength(ast, types, values, generics);
+
+            if (lengthReport) {
+                return void u.throwPrettyError(u.errorTypes.LENGTH_MISMATCH, ast, lengthReport);
+            }
+
             const result = types.reduce(
                 (accum, types, index) => {
                     const value = values[index];
@@ -19,7 +25,7 @@ export default function createReporter(ast, validatorFn) {
             return prq.get(result, result => {
                 const invalidReport = result.reports.find(report => !report.valid);
                 return invalidReport
-                    ? u.throwPrettyError(u.errorTypes.TYPE_MISMATCH, ast, invalidReport)
+                    ? void u.throwPrettyError(u.errorTypes.TYPE_MISMATCH, ast, invalidReport)
                     : (value, generics) =>
                           reporterFn(u.getOutputTypes(ast.types), ast.types.length - 1)([value], generics);
             });
