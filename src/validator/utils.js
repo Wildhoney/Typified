@@ -28,24 +28,6 @@ export function getType(value) {
     return nil ? 'void' : value.constructor.name;
 }
 
-export function formatTypeMismatchMessage(expectedTypes, actualType, declaration, message) {
-    const value = `Expected ${expectedTypes.join(' or ')} in \`${declaration}\` declaration but received ${[]
-        .concat(actualType)
-        .join(' or ')}`;
-    return message ? `${value} (${message}).` : `${value}.`;
-}
-
-function pluralise(word, count) {
-    return count === 1 ? word : `${word}s`;
-}
-
-export function formatLengthMismatchMessage(expectedCount, actualCount, declaration) {
-    return `Expected ${expectedCount} function ${pluralise(
-        'parameter',
-        expectedCount
-    )} but received ${actualCount} ${pluralise('parameter', actualCount)} in \`${declaration}\`.`;
-}
-
 export function isScalar(type) {
     return Boolean(parseScalar(type));
 }
