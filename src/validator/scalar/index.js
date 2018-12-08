@@ -2,7 +2,7 @@ import validateArray from './array/index.js';
 import validateObject from './object/index.js';
 import validateFunction from './function/index.js';
 import validatePromise from './promise/index.js';
-import { parseScalar } from '../parser/utils.js';
+import { parseScalar } from '../../parser/utils.js';
 
 const handlers = new Map(
     Object.entries({

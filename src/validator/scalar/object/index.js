@@ -1,6 +1,6 @@
-import { splitTopLevel, parseScalar } from '../../parser/utils.js';
+import { splitTopLevel, parseScalar } from '../../../parser/utils.js';
+import { isType } from '../../utils.js';
 import * as u from './utils.js';
-import { isType } from '../../validator/utils.js';
 
 export default function validateObject(validatorFn, ast, model, generics) {
     const initial = { valid: true, generics };

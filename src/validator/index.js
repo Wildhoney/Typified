@@ -1,6 +1,6 @@
 import * as prq from 'https://cdn.jsdelivr.net/npm/promisesque@0.2.0/src/index.js';
 import * as u from './utils.js';
-import { validateScalar } from '../scalar/index.js';
+import { validateScalar } from './scalar/index.js';
 
 export default function createValidator(ast) {
     return function validatorFn(types, value, generics = {}) {

@@ -4,7 +4,7 @@ import createValidator from './validator/index.js';
 import createReporter from './reporter/index.js';
 import * as u from './utils.js';
 
-export { addScalarValidator } from './scalar/index.js';
+export { addScalarValidator } from './validator/scalar/index.js';
 
 export default function defineType(types, ...expressions) {
     return userFunction => {

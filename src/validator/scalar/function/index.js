@@ -1,6 +1,6 @@
-import { splitTypeDeclaration } from '../../parser/index.js';
-import { Type } from '../../validator/utils.js';
-import { typeDeclaration } from '../../utils.js';
+import { splitTypeDeclaration } from '../../../parser/index.js';
+import { typeDeclaration } from '../../../utils.js';
+import { Type } from '../../utils.js';
 
 export default function validateFunction(validatorFn, ast, value, generics) {
     if (!value[typeDeclaration]) {

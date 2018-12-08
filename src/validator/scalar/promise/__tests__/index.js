@@ -1,7 +1,7 @@
 import test from 'ava';
-import * as parser from '../../../parser/index.js';
-import createValidator from '../../../validator/index.js';
-import type from '../../../index.js';
+import * as parser from '../../../../parser/index.js';
+import createValidator from '../../../../validator/index.js';
+import type from '../../../../index.js';
 
 test('It should be able to validate declarations with concrete promise types;', async t => {
     const declaration = 'Promise(String)';

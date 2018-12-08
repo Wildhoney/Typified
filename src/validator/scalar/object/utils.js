@@ -1,4 +1,4 @@
-import { splitTopLevel } from '../../parser/utils.js';
+import { splitTopLevel } from '../../../parser/utils.js';
 
 export function getTypeMap(declaration) {
     return splitTopLevel(declaration, ',').reduce((accum, declaration) => {

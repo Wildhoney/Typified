@@ -1,7 +1,7 @@
 import test from 'ava';
-import * as parser from '../../../parser/index.js';
-import createValidator from '../../../validator/index.js';
-import type from '../../../index.js';
+import * as parser from '../../../../parser/index.js';
+import createValidator from '../../../../validator/index.js';
+import type from '../../../../index.js';
 
 test('It should be able to validate function types without a declaration;', t => {
     const sayHello = (name, age) => `Hello ${name}! You are ${age}.`;

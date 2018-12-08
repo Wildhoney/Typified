@@ -1,5 +1,5 @@
-import { splitTopLevel, parseScalar } from '../../parser/utils.js';
-import { isType } from '../../validator/utils.js';
+import { splitTopLevel, parseScalar } from '../../../parser/utils.js';
+import { isType } from '../../utils.js';
 
 export default function validateArray(validatorFn, ast, collection, generics) {
     const initial = { valid: true, generics };
