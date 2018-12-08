@@ -19,7 +19,7 @@ export function throwPrettyError(type, ast, report) {
             const colouring = colouredTypes(ast.types, report.position);
 
             console.trace(
-                `%cTypified%c:\n\n%c Expected ${colouring.types} %cin %cgetName %cbut received %c${
+                `%cTypified%c:\n\n%c Expected ${colouring.types} %cin %c${ast.name} %cbut received %c${
                     report.error.actual
                 }\n`,
                 'color: #656d78; font-weight: bold; text-decoration: underline',

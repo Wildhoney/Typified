@@ -1,11 +1,14 @@
 import * as u from './utils.js';
 
 export function splitTypeDeclaration(declaration) {
-    const { groups } = declaration.match(/((?:∀|forall)(?<generics>.+?)\.)?((?<aliases>.+?)(?:⇒|=>))?(?<types>.+)/iu);
+    const { groups } = declaration.match(
+        /((?<name>.+?)∷|::)?((?:∀|forall)(?<generics>.+?)\.)?((?<aliases>.+?)(?:⇒|=>))?(?<types>.+)/iu
+    );
+    const name = !groups.name ? null : groups.name.trim();
     const aliases = !groups.aliases ? {} : parseAliases(groups.aliases);
     const generics = !groups.generics ? [] : parseGenerics(groups.generics);
     const types = parseTypes(groups.types, aliases);
-    return { types, aliases, generics, declaration };
+    return { name, types, aliases, generics, declaration };
 }
 
 export function parseAliases(declaration) {

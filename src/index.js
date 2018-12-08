@@ -11,7 +11,7 @@ export default function defineType(types, ...expressions) {
         const declaration = u.concatTemplate(types, expressions);
 
         if (u.isFunction(userFunction)) {
-            const f = (...input) => {
+            const userFunctionWrapped = (...input) => {
                 // Parse the declaration into its own AST, create the validator context and render the first
                 // error encountered if the type declaration is invalid for the values passed.
                 const ast = parser.splitTypeDeclaration(declaration);
@@ -23,8 +23,8 @@ export default function defineType(types, ...expressions) {
                 });
             };
 
-            f[u.typeDeclaration] = declaration;
-            return f;
+            userFunctionWrapped[u.typeDeclaration] = declaration;
+            return userFunctionWrapped;
         }
 
         return userFunction;
