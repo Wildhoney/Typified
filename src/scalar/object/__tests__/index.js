@@ -1,6 +1,6 @@
 import test from 'ava';
 import * as parser from '../../../parser/index.js';
-import { createValidator } from '../../../validator/index.js';
+import createValidator from '../../../validator/index.js';
 import type from '../../../index.js';
 
 test('It should be able to validate declarations with object types;', t => {
@@ -18,19 +18,31 @@ test('It should be able to validate declarations with object types;', t => {
         valid: false,
         type: 'Object(name: String)',
         generics: {},
-        error: `Expected Object(name: s, age: Number) in \`${declaration}\` declaration but received Object(name: String).`
+        error: {
+            expected: ['Object(name: s, age: Number)'],
+            actual: 'Object(name: String)',
+            types: [['Object(name: s, age: Number)']]
+        }
     });
     t.deepEqual(validate(expectedTypes, { name: 'Adam', age: 33, location: 'Watford, UK' }), {
         valid: false,
         type: 'Object(name: String, age: Number, location: String)',
         generics: {},
-        error: `Expected Object(name: s, age: Number) in \`${declaration}\` declaration but received Object(name: String, age: Number, location: String).`
+        error: {
+            expected: ['Object(name: s, age: Number)'],
+            actual: 'Object(name: String, age: Number, location: String)',
+            types: [['Object(name: s, age: Number)']]
+        }
     });
     t.deepEqual(validate(expectedTypes, 'Adam'), {
         valid: false,
         type: 'String',
         generics: {},
-        error: `Expected Object(name: s, age: Number) in \`${declaration}\` declaration but received String.`
+        error: {
+            expected: ['Object(name: s, age: Number)'],
+            actual: 'String',
+            types: [['Object(name: s, age: Number)']]
+        }
     });
 });
 

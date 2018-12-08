@@ -1,6 +1,6 @@
 import test from 'ava';
 import * as parser from '../../../parser/index.js';
-import { createValidator } from '../../../validator/index.js';
+import createValidator from '../../../validator/index.js';
 import type from '../../../index.js';
 
 test('It should be able to validate declarations with concrete promise types;', async t => {
@@ -14,11 +14,12 @@ test('It should be able to validate declarations with concrete promise types;', 
         generics: {},
         error: null
     });
+
     t.deepEqual(await validate(expectedTypes, Promise.resolve(33)), {
         valid: false,
         type: 'Promise(Number)',
         generics: {},
-        error: 'Expected Promise(String) in `Promise(String)` declaration but received Promise(Number).'
+        error: { expected: ['Promise(String)'], actual: 'Promise(Number)', types: [['Promise(String)']] }
     });
 });
 
@@ -37,7 +38,7 @@ test('It should be able to validate declarations with alias promise types;', asy
         valid: false,
         type: 'Promise(Number)',
         generics: {},
-        error: 'Expected Promise(s) in `String s => Promise(s)` declaration but received Promise(Number).'
+        error: { expected: ['Promise(s)'], actual: 'Promise(Number)', types: [['Promise(s)']] }
     });
 });
 
@@ -56,7 +57,7 @@ test('It should be able to validate declarations with generic promise types;', a
         valid: false,
         type: 'Promise(String)',
         generics: { a: 'Number' },
-        error: 'Expected Promise(a) in `forall a. Promise(a)` declaration but received Promise(String).'
+        error: { expected: ['Promise(a)'], actual: 'Promise(String)', types: [['Promise(a)']] }
     });
 });
 

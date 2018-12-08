@@ -1,6 +1,6 @@
 import test from 'ava';
 import * as parser from '../../../parser/index.js';
-import { createValidator } from '../../../validator/index.js';
+import createValidator from '../../../validator/index.js';
 import type from '../../../index.js';
 
 test('It should be able to validate function types without a declaration;', t => {
@@ -39,7 +39,15 @@ test('It should be able to validate declarations with concrete function types;',
         valid: false,
         type: '(String → Number → String)',
         generics: {},
-        error: `Expected (String → String → String) in \`${declaration}\` declaration but received (String → Number → String).`
+        error: {
+            expected: ['(String → String → String)'],
+            actual: '(String → Number → String)',
+            types: [
+                ['(String → Number → String)'],
+                ['(String|Date → Boolean|Number → String)'],
+                ['(String → String → String)']
+            ]
+        }
     });
 });
 
@@ -64,7 +72,11 @@ test('It should be able to validate declarations with alias function types;', t 
         valid: false,
         type: '(String s ⇒ s → Number → s)',
         generics: {},
-        error: `Expected (d → n → String) in \`${declaration}\` declaration but received (String s ⇒ s → Number → s).`
+        error: {
+            expected: ['(d → n → String)'],
+            actual: '(String s ⇒ s → Number → s)',
+            types: [['(String → n → String)'], ['(String → n|d → String|Boolean)'], ['(d → n → String)']]
+        }
     });
 });
 
@@ -89,13 +101,21 @@ test('It should be able to validate declarations with generic function types;', 
         valid: false,
         type: '(String → Number → String)',
         generics: {},
-        error: `Expected (a → a → a) in \`${declaration}\` declaration but received (String → Number → String).`
+        error: {
+            expected: ['(a → a → a)'],
+            actual: '(String → Number → String)',
+            types: [['(a → Number → a)'], ['(a → b → c)'], ['(a → a → a)'], ['(x → y → z)']]
+        }
     });
     t.deepEqual(validate(ast.types[3], sayHello), {
         valid: false,
         type: '(String → Number → String)',
         generics: {},
-        error: `Expected (x → y → z) in \`${declaration}\` declaration but received (String → Number → String).`
+        error: {
+            expected: ['(x → y → z)'],
+            actual: '(String → Number → String)',
+            types: [['(a → Number → a)'], ['(a → b → c)'], ['(a → a → a)'], ['(x → y → z)']]
+        }
     });
 });
 
@@ -120,14 +140,20 @@ test('It should be able to validate declarations with reversed generic function 
         valid: false,
         type: '(∀ a b. a → b → a)',
         generics: {},
-        error:
-            'Expected (s → s → s) in `∀ s n. (s → n → s) → (String → Number → String) → (s → s → s) → (s → n → n)` declaration but received (∀ a b. a → b → a).'
+        error: {
+            expected: ['(s → s → s)'],
+            actual: '(∀ a b. a → b → a)',
+            types: [['(s → n → s)'], ['(String → Number → String)'], ['(s → s → s)'], ['(s → n → n)']]
+        }
     });
     t.deepEqual(validate(ast.types[3], sayHello), {
         valid: false,
         type: '(∀ a b. a → b → a)',
         generics: {},
-        error:
-            'Expected (s → n → n) in `∀ s n. (s → n → s) → (String → Number → String) → (s → s → s) → (s → n → n)` declaration but received (∀ a b. a → b → a).'
+        error: {
+            expected: ['(s → n → n)'],
+            actual: '(∀ a b. a → b → a)',
+            types: [['(s → n → s)'], ['(String → Number → String)'], ['(s → s → s)'], ['(s → n → n)']]
+        }
     });
 });

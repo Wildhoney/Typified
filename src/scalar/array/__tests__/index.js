@@ -1,6 +1,6 @@
 import test from 'ava';
 import * as parser from '../../../parser/index.js';
-import { createValidator } from '../../../validator/index.js';
+import createValidator from '../../../validator/index.js';
 import type from '../../../index.js';
 
 test('It should be able to validate declarations with array types;', t => {
@@ -18,13 +18,13 @@ test('It should be able to validate declarations with array types;', t => {
         valid: false,
         type: 'Array(String, Number)',
         generics: {},
-        error: `Expected Array(s) in \`${declaration}\` declaration but received Array(String, Number).`
+        error: { expected: ['Array(s)'], actual: 'Array(String, Number)', types: [['Array(s)']] }
     });
     t.deepEqual(validate(expectedTypes, 'Adam'), {
         valid: false,
         type: 'String',
         generics: {},
-        error: `Expected Array(s) in \`${declaration}\` declaration but received String.`
+        error: { expected: ['Array(s)'], actual: 'String', types: [['Array(s)']] }
     });
 });
 

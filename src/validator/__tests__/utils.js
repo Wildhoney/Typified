@@ -3,7 +3,7 @@ import * as u from '../utils.js';
 import { splitTypeDeclaration } from '../../parser/index.js';
 import type from '../../index.js';
 
-test('It should be able to format the type mismatch and length messages;', t => {
+test.skip('It should be able to format the type mismatch and length messages;', t => {
     t.is(
         u.formatTypeMismatchMessage(['String'], 'Number', 'Array(String) → Date → String'),
         'Expected String in `Array(String) → Date → String` declaration but received Number.'
