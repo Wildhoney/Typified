@@ -16,30 +16,28 @@ const printAdam =
     ꓽ `(String → Number → String) → void`
     (helloFn => console.log(helloFn('Adam', 33)));
 
-// printAdam(getHello);
+printAdam(getHello);
 
 window.t = ꓽ;
 window.getName = ꓽ`String → String`(name => 'Hello ' + name);
-// console.log('%cWelcome to %cTypified. ', 'color: #434a54', 'color: #434a54; font-weight: bold');
-// console.log(
-//     '%cUse %c`t` %cto set types: %cconst getName = t %c`String → String` %c(name => name)',
-//     'color: #656d78',
-//     'color: deeppink',
-//     'color: #656d78',
-//     'color: deeppink',
-//     'color: green',
-//     'color: deeppink'
-// );
-// console.log(
-//     "%cAnd then call it with different types to test it: %cgetName(%c'Adam'%c) %cand %cgetName(%c33%c)",
-//     'color: #656d78',
-//     'color: deeppink',
-//     'color: green',
-//     'color: deeppink',
-//     'color: #656d78',
-//     'color: deeppink',
-//     'color: green',
-//     'color: deeppink'
-// );
-
-getName(33);
+console.log('%cWelcome to %cTypified. ', 'color: #434a54', 'color: #434a54; font-weight: bold');
+console.log(
+    '%cUse %c`t` %cto set types: %cconst getName = t %c`String → String` %c(name => name)',
+    'color: #656d78',
+    'color: deeppink',
+    'color: #656d78',
+    'color: deeppink',
+    'color: green',
+    'color: deeppink'
+);
+console.log(
+    "%cAnd then call it with different types to test it: %cgetName(%c'Adam'%c) %cand %cgetName(%c33%c)",
+    'color: #656d78',
+    'color: deeppink',
+    'color: green',
+    'color: deeppink',
+    'color: #656d78',
+    'color: deeppink',
+    'color: green',
+    'color: deeppink'
+);
