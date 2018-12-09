@@ -9,12 +9,12 @@ export { addScalarValidator } from './validator/scalar/index.js';
 export default function defineType(types, ...expressions) {
     return userFunction => {
         const declaration = u.concatTemplate(types, expressions);
+        const ast = parser.splitTypeDeclaration(declaration);
 
         if (u.isFunction(userFunction)) {
             const userFunctionWrapped = (...input) => {
                 // Parse the declaration into its own AST, create the validator context and render the first
                 // error encountered if the type declaration is invalid for the values passed.
-                const ast = parser.splitTypeDeclaration(declaration);
                 const inputReporter = createReporter(ast, createValidator(ast, declaration));
 
                 return prq.get(inputReporter(input), outputReporter => {
@@ -24,6 +24,10 @@ export default function defineType(types, ...expressions) {
             };
 
             userFunctionWrapped[u.typeDeclaration] = declaration;
+
+            // Define the name for the passed function that is being typed.
+            ast.name && Object.defineProperty(userFunctionWrapped, 'name', { value: ast.name, writable: false });
+
             return userFunctionWrapped;
         }
 
