@@ -29,8 +29,7 @@ export default function createReporter(ast, validatorFn) {
                 return invalidReport
                     ? void u.throwPrettyError(u.errorTypes.TYPE_MISMATCH, ast, invalidReport)
                     : position === 0
-                    ? (value, generics) =>
-                          reporterFn(u.getOutputTypes(ast.types), ast.types.length - 1)([value], generics)
+                    ? value => reporterFn(u.getOutputTypes(ast.types), ast.types.length - 1)([value], result.generics)
                     : null;
             });
         };
