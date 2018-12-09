@@ -23,17 +23,17 @@ With Typified you introduce JavaScript to the world of strong typing in a functi
 ```javascript
 import ꓽ from 'typified';
 
-const sayHello = ꓽ `String → String` (name => `Hello ${name}!`);
+const sayHello =
+    t`sayHello ∷ String → String` (name => `Hello ${name}!`);
 ```
-
-**Note:** `ꓽ` notation closely resembles how [Idris](https://en.wikipedia.org/wiki/Idris_(programming_language)#Functional_programming) implements types.
 
 By invoking `sayHello` with a `String` we're guaranteed to be returned a `String` otherwise Typified will throw a `TypeMismatchError` that will notify the developer of such an occurrence. Passing in anything other than `String` will throw the mismatch error.
 
 Typified tries to stay close to the JavaScript world, and thus allows specifying the union operator (`|`) to accept multiple types. For instance our `sayHello` function could take a `Number` type as well and be perfectly fine, as it's not performing any `String`-specific operations &ndash; thus we could augment the types to allow `Number` to be passed too.
 
 ```javascript
-const sayHello = ꓽ `String|Number → String` (name => `Hello ${name}!`);
+const sayHello =
+    t`sayHello ∷ String|Number → String` (name => `Hello ${name}!`);
 ```
 
 Invoking `sayHello` with a `Number` type would be just as fine as invoking it with a `String`.
@@ -42,10 +42,10 @@ Typified also supports to the concept of [generics](https://en.wikipedia.org/wik
 
 ```javascript
 const sayHello =
-    ꓽ `String → String → String` ((firstName, secondName) => {
-        return firstName === secondName
-            ? `Hello ${firstName}!`
-            : `Hello ${firstName} & ${secondName}!`;
+    t`sayHello ∷ String → String → String` ((first, second) => {
+        return first === second
+            ? `Hello ${first}!`
+            : `Hello ${first} & ${second}!`;
     });
 ```
 
@@ -55,10 +55,10 @@ You might be tempted to define the type as `String|Number → String|Number → 
 
 ```javascript
 const sayHello =
-    ꓽ `∀ a. a → a → String` ((firstName, secondName) => {
-        return firstName === secondName
-            ? `Hello ${firstName}!`
-            : `Hello ${firstName} & ${secondName}!`;
+    t`sayHello ∷ ∀ a. a → a → String` ((first, second) => {
+        return first === second
+            ? `Hello ${first}!`
+            : `Hello ${first} & ${second}!`;
     });
 ```
 
