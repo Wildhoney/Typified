@@ -154,3 +154,14 @@ test('It should be able to parse the declaration for the function name with alia
         declaration
     });
 });
+
+test('It should be able to parse the declaration for the function name with generic types;', t => {
+    const declaration = 'testFunction :: ∀ a b. a → b';
+    t.deepEqual(parser.splitTypeDeclaration(declaration), {
+        name: 'testFunction',
+        types: [['a'], ['b']],
+        generics: ['a', 'b'],
+        aliases: {},
+        declaration
+    });
+});
