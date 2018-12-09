@@ -3,7 +3,7 @@ export const errorTypes = {
     LENGTH_MISMATCH: Symbol('length-mismatch')
 };
 
-function colouredTypes(types, position) {
+export function colouredTypes(types, position) {
     return {
         types: `%c${types.join('%c → %c')}%c`,
         styles: types.flatMap((_, index) => [
@@ -13,7 +13,7 @@ function colouredTypes(types, position) {
     };
 }
 
-export function validateLength(ast, types, values, generics) {
+export function validateLength(ast, types, values, generics = {}) {
     const voidTypes = types.reduce((count, type) => {
         return type.includes('void') ? count + 1 : count;
     }, 0);
@@ -88,15 +88,15 @@ export function getOutputTypes(types) {
     return types.slice(types.length - 1);
 }
 
+export function pluralise(word, count) {
+    return count === 1 ? word : `${word}s`;
+}
+
 export function formatTypeMismatchMessage(expectedTypes, actualType, declaration, message) {
     const value = `Expected ${expectedTypes.join(' or ')} in \`${declaration}\` declaration but received ${[]
         .concat(actualType)
         .join(' or ')}`;
     return message ? `${value} (${message}).` : `${value}.`;
-}
-
-function pluralise(word, count) {
-    return count === 1 ? word : `${word}s`;
 }
 
 export function formatLengthMismatchMessage(expectedCount, actualCount, declaration) {

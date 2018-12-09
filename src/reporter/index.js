@@ -13,11 +13,13 @@ export default function createReporter(ast, validatorFn) {
             const result = types.reduce(
                 (accum, types, index) => {
                     const value = values[index];
-                    const report = validatorFn(types, value, accum.generics);
-                    return prq.get(report, report => ({
-                        reports: [...accum.reports, { ...report, position: position + index }],
-                        generics: { ...accum.generics, ...report.generics }
-                    }));
+                    return prq.get(accum, accum => {
+                        const report = validatorFn(types, value, accum.generics);
+                        return prq.get(report, report => ({
+                            reports: [...accum.reports, { ...report, position: position + index }],
+                            generics: { ...accum.generics, ...report.generics }
+                        }));
+                    });
                 },
                 { reports: [], generics }
             );
@@ -26,8 +28,10 @@ export default function createReporter(ast, validatorFn) {
                 const invalidReport = result.reports.find(report => !report.valid);
                 return invalidReport
                     ? void u.throwPrettyError(u.errorTypes.TYPE_MISMATCH, ast, invalidReport)
-                    : (value, generics) =>
-                          reporterFn(u.getOutputTypes(ast.types), ast.types.length - 1)([value], generics);
+                    : position === 0
+                    ? (value, generics) =>
+                          reporterFn(u.getOutputTypes(ast.types), ast.types.length - 1)([value], generics)
+                    : null;
             });
         };
     }

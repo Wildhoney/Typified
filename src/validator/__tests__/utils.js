@@ -3,26 +3,6 @@ import * as u from '../utils.js';
 import { splitTypeDeclaration } from '../../parser/index.js';
 import type from '../../index.js';
 
-test.skip('It should be able to format the type mismatch and length messages;', t => {
-    t.is(
-        u.formatTypeMismatchMessage(['String'], 'Number', 'Array(String) → Date → String'),
-        'Expected String in `Array(String) → Date → String` declaration but received Number.'
-    );
-    t.is(
-        u.formatTypeMismatchMessage(
-            ['String'],
-            'Number',
-            'Array(String) → Date → String',
-            'Array values must be of a single type'
-        ),
-        'Expected String in `Array(String) → Date → String` declaration but received Number (Array values must be of a single type).'
-    );
-    t.is(
-        u.formatLengthMismatchMessage(3, 2, 'Number → String → Date'),
-        'Expected 3 function parameters but received 2 parameters in `Number → String → Date`.'
-    );
-});
-
 test('It should be able to determine the types of values;', t => {
     t.is(u.getType('Adam'), 'String');
     t.is(u.getType([]), 'Array');
