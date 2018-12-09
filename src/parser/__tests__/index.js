@@ -133,13 +133,24 @@ test('It should be able to parse the declaration with a handful of generic types
     });
 });
 
-test('It should be able to parse the declaration for the function name;', t => {
+test('It should be able to parse the declaration for the function name with concrete types;', t => {
     const declaration = 'testFunction ∷ String → String';
     t.deepEqual(parser.splitTypeDeclaration(declaration), {
         name: 'testFunction',
         types: [['String'], ['String']],
         generics: [],
         aliases: {},
+        declaration
+    });
+});
+
+test('It should be able to parse the declaration for the function name with alias types;', t => {
+    const declaration = 'testFunction :: String s ⇒ s → s';
+    t.deepEqual(parser.splitTypeDeclaration(declaration), {
+        name: 'testFunction',
+        types: [['String'], ['String']],
+        generics: [],
+        aliases: { s: 'String' },
         declaration
     });
 });

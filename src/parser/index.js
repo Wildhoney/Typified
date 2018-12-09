@@ -2,7 +2,7 @@ import * as u from './utils.js';
 
 export function splitTypeDeclaration(declaration) {
     const { groups } = declaration.match(
-        /((?<name>.+?)∷|::)?((?:∀|forall)(?<generics>.+?)\.)?((?<aliases>.+?)(?:⇒|=>))?(?<types>.+)/iu
+        /((?<name>.+?)(?:∷|::))?((?:∀|forall)(?<generics>.+?)\.)?((?<aliases>.+?)(?:⇒|=>))?(?<types>.+)/iu
     );
     const name = !groups.name ? null : groups.name.trim();
     const aliases = !groups.aliases ? {} : parseAliases(groups.aliases);
